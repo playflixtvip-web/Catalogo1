@@ -164,6 +164,116 @@
             transform: translateY(-2px);
         }
 
+        /* Carrossel de Destaques */
+        .carrossel-container {
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-standard);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .carrossel-titulo {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .carrossel-track {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) var(--card-border);
+        }
+
+        .carrossel-track::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .carrossel-track::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .carrossel-item {
+            min-width: 140px;
+            max-width: 140px;
+            background: var(--dark-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .carrossel-item:hover {
+            border-color: var(--primary);
+        }
+
+        .carrossel-img-box {
+            width: 100%;
+            height: 110px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carrossel-img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .carrossel-nome {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .carrossel-preco {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Barra de Busca */
+        .busca-container {
+            margin-bottom: 25px;
+        }
+
+        .input-busca {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-standard);
+            color: var(--text-main);
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .input-busca:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
         /* Sistema de Abas */
         .tabs {
             display: flex;
@@ -309,11 +419,18 @@
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
-        /* Grid de Produtos */
+        /* Grid de Produtos - Ajustado para 2 colunas no mobile */
         .catalogo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .catalogo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 25px;
+            }
         }
 
         .produto-card {
@@ -337,43 +454,55 @@
 
         .tag-encomenda {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 8px;
+            left: 8px;
             background: var(--warning);
             color: #000;
-            padding: 5px 10px;
+            padding: 3px 7px;
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
             z-index: 2;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+        }
+
+        @media (min-width: 768px) {
+            .tag-encomenda { top: 12px; left: 12px; padding: 5px 10px; font-size: 11px; }
         }
 
         .tag-desconto {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 8px;
+            right: 8px;
             background: var(--danger);
             color: white;
-            padding: 5px 10px;
+            padding: 3px 7px;
             border-radius: 6px;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
             z-index: 2;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
 
+        @media (min-width: 768px) {
+            .tag-desconto { top: 12px; right: 12px; padding: 5px 10px; font-size: 11px; }
+        }
+
         .produto-img-box {
             width: 100%;
-            height: 230px;
+            height: 150px;
             background: #111;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             border-bottom: 1px solid var(--card-border);
+        }
+
+        @media (min-width: 768px) {
+            .produto-img-box { height: 230px; }
         }
 
         .produto-img {
@@ -387,27 +516,65 @@
         }
 
         .produto-info {
-            padding: 20px;
+            padding: 12px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding-bottom: 110px; /* Espaço reservado para o rodapé fixo do card */
+            padding-bottom: 105px;
+        }
+
+        @media (min-width: 768px) {
+            .produto-info { padding: 20px; padding-bottom: 110px; }
         }
 
         .produto-nome {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             line-height: 1.3;
         }
 
+        @media (min-width: 768px) {
+            .produto-nome { font-size: 18px; margin-bottom: 8px; }
+        }
+
         .produto-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
-            margin-bottom: 15px;
-            line-height: 1.5;
+            margin-bottom: 12px;
+            line-height: 1.4;
             flex-grow: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        @media (min-width: 768px) {
+            .produto-desc { font-size: 13px; line-height: 1.5; }
+        }
+
+        .produto-desc.expandido {
+            display: block;
+            -webkit-line-clamp: unset;
+        }
+
+        .btn-ver-mais {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 10px;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .btn-ver-mais:hover {
+            text-decoration: underline;
         }
 
         .preco-box {
@@ -417,18 +584,26 @@
         }
 
         .preco-antigo {
-            font-size: 13px;
+            font-size: 11px;
             color: #777;
             text-decoration: line-through;
-            margin-right: 8px;
+            margin-right: 6px;
             display: inline-block;
         }
 
+        @media (min-width: 768px) {
+            .preco-antigo { font-size: 13px; margin-right: 8px; }
+        }
+
         .produto-preco {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--primary);
             display: inline-block;
+        }
+
+        @media (min-width: 768px) {
+            .produto-preco { font-size: 20px; }
         }
 
         /* Rodapé fixo do card com seletor de quantidade e botão próprio */
@@ -439,11 +614,15 @@
             width: 100%;
             background: var(--card-bg);
             border-top: 1px solid var(--card-border);
-            padding: 12px 15px;
+            padding: 8px 10px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             z-index: 5;
+        }
+
+        @media (min-width: 768px) {
+            .produto-acoes-footer { padding: 12px 15px; gap: 10px; }
         }
 
         .card-qtd-controle {
@@ -453,45 +632,57 @@
             background: var(--dark-bg);
             border: 1px solid var(--card-border);
             border-radius: 8px;
-            padding: 4px 10px;
+            padding: 2px 8px;
+        }
+
+        @media (min-width: 768px) {
+            .card-qtd-controle { padding: 4px 10px; }
         }
 
         .card-qtd-btn {
             background: transparent;
             border: none;
             color: var(--primary);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            padding: 2px 12px;
+            padding: 2px 8px;
         }
 
-        .card-qtd-btn:hover {
-            color: #fff;
+        @media (min-width: 768px) {
+            .card-qtd-btn { font-size: 18px; padding: 2px 12px; }
         }
 
         .card-qtd-numero {
             font-weight: 700;
-            font-size: 15px;
+            font-size: 13px;
             color: var(--text-main);
+        }
+
+        @media (min-width: 768px) {
+            .card-qtd-numero { font-size: 15px; }
         }
 
         .btn-add-carrinho {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             background: var(--primary);
             color: #000;
             border: none;
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 11px;
             cursor: pointer;
             border-radius: 8px;
             transition: background 0.3s ease;
             text-transform: uppercase;
+        }
+
+        @media (min-width: 768px) {
+            .btn-add-carrinho { padding: 10px; font-size: 13px; gap: 8px; }
         }
 
         .btn-add-carrinho:hover {
@@ -817,6 +1008,8 @@
         async function carregarCatalogo() {
             const perfilBox = document.getElementById('perfil-loja-container');
             const container = document.getElementById('lista-catalogo');
+            const carrosselContainer = document.getElementById('carrossel-destaques-container');
+            const carrosselTrack = document.getElementById('carrossel-track');
             if (!container) return;
 
             try {
@@ -859,12 +1052,16 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "produtos"));
                 container.innerHTML = '';
+                carrosselTrack.innerHTML = '';
                 produtosGlobais = {};
 
                 if (querySnapshot.empty) {
                     container.innerHTML = '<div class="sem-produtos">Nenhum produto cadastrado no momento.</div>';
+                    carrosselContainer.style.display = 'none';
                     return;
                 }
+
+                carrosselContainer.style.display = 'block';
 
                 querySnapshot.forEach((docSnap) => {
                     const prod = docSnap.data();
@@ -880,9 +1077,29 @@
                     const qtdAtual = quantidadesCards[id];
                     const subtotalCard = (precoUnitarioNum * qtdAtual).toFixed(2).replace('.', ',');
 
+                    // Montar Item do Carrossel
+                    const carItem = document.createElement('div');
+                    carItem.className = 'carrossel-item';
+                    carItem.onclick = () => {
+                        const elementoCard = document.querySelector(`[data-id="${id}"]`);
+                        if(elementoCard) {
+                            elementoCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    };
+                    carItem.innerHTML = `
+                        <div class="carrossel-img-box">
+                            <img src="${prod.imagem}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};" onerror="this.src='https://via.placeholder.com/140x110?text=Sem+Foto'">
+                        </div>
+                        <div class="carrossel-nome">${prod.nome}</div>
+                        <div class="carrossel-preco">R$ ${calc.precoFinal}</div>
+                    `;
+                    carrosselTrack.appendChild(carItem);
+
+                    // Montar Card do Catálogo
                     const card = document.createElement('div');
                     card.className = 'produto-card';
                     card.setAttribute('data-id', id);
+                    card.setAttribute('data-nome', prod.nome.toLowerCase());
                     card.innerHTML = `
                         <div class="tag-encomenda">📦 Sob Encomenda</div>
                         ${calc.temDesconto ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
@@ -891,7 +1108,8 @@
                         </div>
                         <div class="produto-info">
                             <div class="produto-nome">${prod.nome}</div>
-                            <div class="produto-desc">${prod.descricao || ''}</div>
+                            <div class="produto-desc" id="desc-${id}">${prod.descricao || ''}</div>
+                            ${prod.descricao && prod.descricao.length > 50 ? `<button class="btn-ver-mais" onclick="alternarDescricao('${id}')" id="btn-desc-${id}">Ver mais</button>` : ''}
                             <div class="preco-box">
                                 ${calc.temDesconto ? `<span class="preco-antigo">R$ ${prod.preco}</span>` : ''}
                                 <span class="produto-preco" id="preco-total-card-${id}">R$ ${subtotalCard}</span>
@@ -903,7 +1121,7 @@
                                 <span class="card-qtd-numero" id="qtd-card-num-${id}">${qtdAtual}</span>
                                 <button class="card-qtd-btn" onclick="alterarQtdCard('${id}', 1, ${precoUnitarioNum})">+</button>
                             </div>
-                            <button class="btn-add-carrinho" onclick="adicionarComQtdCard('${id}')">🛒 Adicionar ao Carrinho</button>
+                            <button class="btn-add-carrinho" onclick="adicionarComQtdCard('${id}')">🛒 Adicionar</button>
                         </div>
                     `;
                     container.appendChild(card);
@@ -913,6 +1131,32 @@
                 console.error(error);
                 container.innerHTML = '<div class="sem-produtos">Erro ao carregar os produtos.</div>';
             }
+        }
+
+        window.alternarDescricao = function(id) {
+            const descEl = document.getElementById(`desc-${id}`);
+            const btnEl = document.getElementById(`btn-desc-${id}`);
+            if(descEl.classList.contains('expandido')) {
+                descEl.classList.remove('expandido');
+                btnEl.innerText = 'Ver mais';
+            } else {
+                descEl.classList.add('expandido');
+                btnEl.innerText = 'Ver menos';
+            }
+        }
+
+        window.filtrarProdutos = function() {
+            const termo = document.getElementById('input-busca').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.produto-card');
+            
+            cards.forEach(card => {
+                const nome = card.getAttribute('data-nome');
+                if (nome.includes(termo)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         }
 
         window.alterarQtdCard = function(id, delta, precoUnitario) {
@@ -947,13 +1191,11 @@
 
             atualizarCarrinhoUI();
 
-            // Reseta o contador do card para 1
             quantidadesCards[id] = 1;
             document.getElementById(`qtd-card-num-${id}`).innerText = 1;
             let subInicial = (calc.valorNumerico * 1).toFixed(2).replace('.', ',');
             document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${subInicial}`;
 
-            // Exibe o modal com as opções Continuar / Agendar
             document.getElementById('texto-aviso-sucesso').innerText = `✅ ${qtdParaAdicionar}x "${produto.nome}" adicionado com sucesso!`;
             document.getElementById('modal-aviso-sucesso').style.display = 'flex';
         }
@@ -1294,6 +1536,18 @@
         <!-- SEÇÃO: CATÁLOGO -->
         <div id="secao-catalogo" class="section active">
             <div id="perfil-loja-container" class="loja-header"></div>
+
+            <!-- Carrossel de Destaques -->
+            <div id="carrossel-destaques-container" class="carrossel-container" style="display: none;">
+                <div class="carrossel-titulo">✨ Produtos em Destaque</div>
+                <div id="carrossel-track" class="carrossel-track"></div>
+            </div>
+
+            <!-- Campo de Busca -->
+            <div class="busca-container">
+                <input type="text" id="input-busca" class="input-busca" placeholder="🔍 Buscar perfume por nome..." oninput="filtrarProdutos()">
+            </div>
+
             <div id="lista-catalogo" class="catalogo-grid"></div>
         </div>
 
