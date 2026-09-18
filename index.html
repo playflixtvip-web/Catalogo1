@@ -391,7 +391,7 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding-bottom: 110px; /* Espaço para o rodapé fixo do card */
+            padding-bottom: 110px;
         }
 
         .produto-nome {
@@ -431,7 +431,6 @@
             display: inline-block;
         }
 
-        /* Rodapé fixo do card com Seletor e Botão Próprio */
         .produto-acoes-footer {
             position: absolute;
             bottom: 0;
@@ -499,7 +498,6 @@
             color: #fff;
         }
 
-        /* Barra Flutuante do Carrinho */
         .carrinho-flutuante {
             position: fixed;
             bottom: 20px;
@@ -531,7 +529,6 @@
             font-size: 13px;
         }
 
-        /* Modais Gerais */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -626,7 +623,6 @@
             margin: 20px 0;
         }
 
-        /* Gestor itens */
         .item-gerenciador {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -716,7 +712,7 @@
         }
     </style>
 
-    <!-- Script do Firebase -->
+    <!-- Script do Firebase com Logs de Diagnóstico -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -730,8 +726,14 @@
           appId: "1:640318923290:web:3a82a279298e248efda7a3"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        let app, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            console.log("✅ Firebase inicializado com sucesso!");
+        } catch (err) {
+            console.error("❌ Erro ao inicializar o Firebase:", err);
+        }
 
         const SENHA_MESTRE = "1234";
         let carrinho = [];
@@ -852,7 +854,7 @@
                         </div>
                     `;
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Erro ao carregar perfil da loja:", e); }
 
             container.innerHTML = '<div class="sem-produtos">Carregando catálogo...</div>';
 
@@ -910,8 +912,8 @@
                 });
                 atualizarCarrinhoUI();
             } catch (error) {
-                console.error(error);
-                container.innerHTML = '<div class="sem-produtos">Erro ao carregar os produtos.</div>';
+                console.error("Erro ao buscar produtos:", error);
+                container.innerHTML = '<div class="sem-produtos">Erro ao carregar os produtos do Firebase. Verifique sua conexão ou regras.</div>';
             }
         }
 
@@ -947,13 +949,11 @@
 
             atualizarCarrinhoUI();
 
-            // Reseta o card para 1
             quantidadesCards[id] = 1;
             document.getElementById(`qtd-card-num-${id}`).innerText = 1;
             let subInicial = (calc.valorNumerico * 1).toFixed(2).replace('.', ',');
             document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${subInicial}`;
 
-            // Exibe o modal personalizado com os botões "Continuar" e "Agendar"
             document.getElementById('texto-aviso-sucesso').innerText = `✅ ${qtdParaAdicionar}x "${produto.nome}" adicionado com sucesso!`;
             document.getElementById('modal-aviso-sucesso').style.display = 'flex';
         }
@@ -1126,19 +1126,19 @@
                         adicionarCampoVendedor('Atendimento', '');
                     }
                 }
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Erro ao carregar dados da loja no form:", e); }
         }
 
         async function carregarGerenciador() {
             const container = document.getElementById('lista-gerenciador');
             if (!container) return;
-            container.innerHTML = '<p style="color:var(--text-muted)">Carregando...</p>';
+            container.innerHTML = '<p style="color:var(--text-muted)">Carregando painel...</p>';
 
             try {
                 const querySnapshot = await getDocs(collection(db, "produtos"));
                 container.innerHTML = '';
                 if (querySnapshot.empty) {
-                    container.innerHTML = '<p style="color: var(--text-muted); text-align:center;">Nenhum produto cadastrado.</p>';
+                    container.innerHTML = '<p style="color: var(--text-muted); text-align:center;">Nenhum produto cadastrado no banco.</p>';
                     return;
                 }
 
@@ -1166,8 +1166,8 @@
                     container.appendChild(item);
                 });
             } catch (error) { 
-                console.error(error); 
-                container.innerHTML = '<p style="color: var(--danger); text-align:center;">Erro ao carregar o gerenciador.</p>';
+                console.error("Erro ao carregar gerenciador:", error); 
+                container.innerHTML = '<p style="color: var(--danger); text-align:center;">Erro ao carregar itens do gerenciador. Verifique as regras do Firestore.</p>';
             }
         }
 
