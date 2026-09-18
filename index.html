@@ -254,7 +254,7 @@
 
         /* Barra de Busca */
         .busca-container {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .input-busca {
@@ -274,7 +274,39 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        /* Sistema de Abas */
+        /* Abas de Categoria no Catálogo */
+        .categorias-catalogo {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            padding: 8px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cat-btn:hover {
+            border-color: var(--primary);
+            color: var(--text-main);
+        }
+
+        .cat-btn.active {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Sistema de Abas Principal */
         .tabs {
             display: flex;
             justify-content: center;
@@ -998,6 +1030,7 @@
         let dadosLojaGlobal = null;
         let imagemCapaBase64 = "";
         let imagemProdutoBase64 = "";
+        let categoriaSelecionada = 'todos';
 
         function converterParaBase64(fileInputId, callback) {
             const fileInput = document.getElementById(fileInputId);
@@ -1070,6 +1103,13 @@
                 temDesconto: true,
                 textoTag: tag
             };
+        }
+
+        window.filtrarCategoria = function(cat, elementoBtn) {
+            categoriaSelecionada = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            if (elementoBtn) elementoBtn.classList.add('active');
+            filtrarProdutos();
         }
 
         async function carregarCatalogo() {
@@ -1167,6 +1207,7 @@
                     card.className = 'produto-card';
                     card.setAttribute('data-id', id);
                     card.setAttribute('data-nome', prod.nome.toLowerCase());
+                    card.setAttribute('data-categoria', prod.categoria || 'masculino');
                     card.innerHTML = `
                         <div class="tag-encomenda">📦 Sob Encomenda</div>
                         ${calc.temDesconto ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
@@ -1194,6 +1235,7 @@
                     container.appendChild(card);
                 });
                 atualizarCarrinhoUI();
+                filtrarProdutos();
             } catch (error) {
                 console.error(error);
                 container.innerHTML = '<div class="sem-produtos">Erro ao carregar os produtos.</div>';
@@ -1228,7 +1270,12 @@
             
             cards.forEach(card => {
                 const nome = card.getAttribute('data-nome');
-                if (nome.includes(termo)) {
+                const cat = card.getAttribute('data-categoria');
+                
+                const matchNome = nome.includes(termo);
+                const matchCat = (categoriaSelecionada === 'todos' || cat === categoriaSelecionada);
+
+                if (matchNome && matchCat) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
@@ -1474,11 +1521,11 @@
                             <img src="${prod.imagem}" style="width: 45px; height: 45px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/45'">
                             <div>
                                 <strong style="color: var(--text-main);">${prod.nome}</strong><br>
-                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} (Encomenda)</span>
+                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} (${prod.categoria || 'masculino'})</span>
                             </div>
                         </div>
                         <div class="acoes-gestor">
-                            <button class="btn-editar" onclick="prepararEdicao('${id}', '${encodeURIComponent(prod.nome || '')}', '${encodeURIComponent(prod.preco || '')}', '${prod.tipoDesconto || 'porcentagem'}', '${prod.valorDesconto || ''}', '${encodeURIComponent(prod.descricao || '')}', '${prod.ajusteImagem || 'contain'}')">Editar</button>
+                            <button class="btn-editar" onclick="prepararEdicao('${id}', '${encodeURIComponent(prod.nome || '')}', '${encodeURIComponent(prod.preco || '')}', '${prod.tipoDesconto || 'porcentagem'}', '${prod.valorDesconto || ''}', '${encodeURIComponent(prod.descricao || '')}', '${prod.ajusteImagem || 'contain'}', '${prod.categoria || 'masculino'}')">Editar</button>
                             <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
                         </div>
                     `;
@@ -1487,12 +1534,13 @@
             } catch (error) { console.error(error); }
         }
 
-        window.prepararEdicao = function(id, nome, preco, tipoDesconto, valorDesconto, descricao, ajusteImagem) {
+        window.prepararEdicao = function(id, nome, preco, tipoDesconto, valorDesconto, descricao, ajusteImagem, categoria) {
             document.getElementById('produto-id').value = id;
             document.getElementById('nome').value = decodeURIComponent(nome);
             document.getElementById('preco').value = decodeURIComponent(preco);
             document.getElementById('tipo-desconto').value = tipoDesconto || 'porcentagem';
             document.getElementById('valor-desconto').value = valorDesconto || '';
+            document.getElementById('categoria').value = categoria || 'masculino';
             document.getElementById('descricao').value = decodeURIComponent(descricao);
             document.getElementById('img-fit').value = ajusteImagem || 'contain';
             document.getElementById('btn-salvar-produto').innerText = 'Atualizar Produto';
@@ -1571,6 +1619,7 @@
                     preco: document.getElementById('preco').value,
                     tipoDesconto: document.getElementById('tipo-desconto').value,
                     valorDesconto: document.getElementById('valor-desconto').value,
+                    categoria: document.getElementById('categoria').value,
                     imagem: imagemProdutoBase64,
                     ajusteImagem: document.getElementById('img-fit').value,
                     descricao: document.getElementById('descricao').value,
@@ -1620,9 +1669,17 @@
                 <div id="carrossel-track" class="carrossel-track"></div>
             </div>
 
-            <!-- Campo de Busca -->
+            <!-- Barra de Busca -->
             <div class="busca-container">
                 <input type="text" id="input-busca" class="input-busca" placeholder="🔍 Buscar perfume por nome..." oninput="filtrarProdutos()">
+            </div>
+
+            <!-- Filtros por Categoria -->
+            <div class="categorias-catalogo">
+                <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
+                <button class="cat-btn" onclick="filtrarCategoria('masculino', this)">Masculino</button>
+                <button class="cat-btn" onclick="filtrarCategoria('feminino', this)">Feminino</button>
+                <button class="cat-btn" onclick="filtrarCategoria('kids', this)">Kids</button>
             </div>
 
             <div id="lista-catalogo" class="catalogo-grid"></div>
@@ -1700,9 +1757,19 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Valor do Desconto (Opcional):</label>
-                            <input type="text" id="valor-desconto" placeholder="Ex: 15">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Valor do Desconto (Opcional):</label>
+                                <input type="text" id="valor-desconto" placeholder="Ex: 15">
+                            </div>
+                            <div class="form-group">
+                                <label>Categoria:</label>
+                                <select id="categoria">
+                                    <option value="masculino">Masculino</option>
+                                    <option value="feminino">Feminino</option>
+                                    <option value="kids">Kids</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Foto do Produto:</label>
