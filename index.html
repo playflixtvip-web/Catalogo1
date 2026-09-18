@@ -1165,7 +1165,10 @@
                     `;
                     container.appendChild(item);
                 });
-            } catch (error) { console.error(error); }
+            } catch (error) { 
+                console.error(error); 
+                container.innerHTML = '<p style="color: var(--danger); text-align:center;">Erro ao carregar o gerenciador.</p>';
+            }
         }
 
         window.prepararEdicao = function(id, nome, preco, tipoDesconto, valorDesconto, descricao, ajusteImagem) {
