@@ -11,6 +11,7 @@
             --primary-light: rgba(212, 175, 55, 0.15);
             --whatsapp: #25d366;
             --whatsapp-dark: #128c7e;
+            --pix-color: #2ecc71;      /* Verde Pix */
             --dark-bg: #0d0d0d;        /* Fundo Ultra Escuro */
             --card-bg: #161616;        /* Fundo dos Cards */
             --card-border: #262626;    /* Borda sutil */
@@ -274,7 +275,7 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        /* Abas de Categoria no Catálogo */
+        /* Abas de Categoria */
         .categorias-catalogo {
             display: flex;
             justify-content: center;
@@ -338,14 +339,8 @@
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
 
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.4s ease forwards;
-        }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
@@ -382,18 +377,9 @@
             padding-bottom: 10px;
         }
 
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
+        .form-group { margin-bottom: 18px; }
+        .form-row { display: flex; gap: 15px; }
+        .form-row .form-group { flex: 1; }
 
         label {
             display: block;
@@ -422,12 +408,7 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        input[type="file"] {
-            padding: 8px;
-            background: #111;
-            cursor: pointer;
-            font-size: 13px;
-        }
+        input[type="file"] { padding: 8px; background: #111; cursor: pointer; font-size: 13px; }
 
         button.btn-submit, button.btn-login {
             background: var(--primary);
@@ -451,7 +432,7 @@
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
 
-        /* Grid de Produtos - Ajustado para 2 colunas no mobile */
+        /* Grid de Produtos */
         .catalogo-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -459,10 +440,7 @@
         }
 
         @media (min-width: 768px) {
-            .catalogo-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                gap: 25px;
-            }
+            .catalogo-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
         }
 
         .produto-card {
@@ -499,9 +477,7 @@
             text-transform: uppercase;
         }
 
-        @media (min-width: 768px) {
-            .tag-encomenda { top: 12px; left: 12px; padding: 5px 10px; font-size: 11px; }
-        }
+        @media (min-width: 768px) { .tag-encomenda { top: 12px; left: 12px; padding: 5px 10px; font-size: 11px; } }
 
         .tag-desconto {
             position: absolute;
@@ -518,9 +494,7 @@
             text-transform: uppercase;
         }
 
-        @media (min-width: 768px) {
-            .tag-desconto { top: 12px; right: 12px; padding: 5px 10px; font-size: 11px; }
-        }
+        @media (min-width: 768px) { .tag-desconto { top: 12px; right: 12px; padding: 5px 10px; font-size: 11px; } }
 
         .produto-img-box {
             width: 100%;
@@ -549,13 +523,9 @@
             transition: opacity 0.3s ease;
         }
 
-        .produto-img-box:hover::after {
-            opacity: 1;
-        }
+        .produto-img-box:hover::after { opacity: 1; }
 
-        @media (min-width: 768px) {
-            .produto-img-box { height: 230px; }
-        }
+        @media (min-width: 768px) { .produto-img-box { height: 230px; } }
 
         .produto-img {
             width: 100%;
@@ -563,21 +533,17 @@
             transition: transform 0.5s ease;
         }
 
-        .produto-card:hover .produto-img {
-            transform: scale(1.05);
-        }
+        .produto-card:hover .produto-img { transform: scale(1.05); }
 
         .produto-info {
             padding: 12px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding-bottom: 105px;
+            padding-bottom: 115px; /* Ajustado para caber o PIX */
         }
 
-        @media (min-width: 768px) {
-            .produto-info { padding: 20px; padding-bottom: 110px; }
-        }
+        @media (min-width: 768px) { .produto-info { padding: 20px; padding-bottom: 125px; } }
 
         .produto-nome {
             font-size: 14px;
@@ -587,9 +553,7 @@
             line-height: 1.3;
         }
 
-        @media (min-width: 768px) {
-            .produto-nome { font-size: 18px; margin-bottom: 8px; }
-        }
+        @media (min-width: 768px) { .produto-nome { font-size: 18px; margin-bottom: 8px; } }
 
         .produto-desc {
             font-size: 12px;
@@ -603,14 +567,8 @@
             -webkit-box-orient: vertical;
         }
 
-        @media (min-width: 768px) {
-            .produto-desc { font-size: 13px; line-height: 1.5; }
-        }
-
-        .produto-desc.expandido {
-            display: block;
-            -webkit-line-clamp: unset;
-        }
+        @media (min-width: 768px) { .produto-desc { font-size: 13px; line-height: 1.5; } }
+        .produto-desc.expandido { display: block; -webkit-line-clamp: unset; }
 
         .btn-ver-mais {
             background: transparent;
@@ -625,9 +583,7 @@
             text-align: left;
         }
 
-        .btn-ver-mais:hover {
-            text-decoration: underline;
-        }
+        .btn-ver-mais:hover { text-decoration: underline; }
 
         .preco-box {
             margin-top: auto;
@@ -642,21 +598,24 @@
             margin-right: 6px;
             display: inline-block;
         }
-
-        @media (min-width: 768px) {
-            .preco-antigo { font-size: 13px; margin-right: 8px; }
-        }
+        @media (min-width: 768px) { .preco-antigo { font-size: 13px; margin-right: 8px; } }
 
         .produto-preco {
             font-size: 16px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--text-main); /* Mudado para branco para destacar o Pix */
             display: inline-block;
         }
+        @media (min-width: 768px) { .produto-preco { font-size: 18px; } }
 
-        @media (min-width: 768px) {
-            .produto-preco { font-size: 20px; }
+        .preco-pix {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--pix-color);
+            margin-top: 3px;
+            display: block;
         }
+        @media (min-width: 768px) { .preco-pix { font-size: 16px; } }
 
         /* Rodapé fixo do card com seletor de quantidade e botão próprio */
         .produto-acoes-footer {
@@ -672,10 +631,7 @@
             gap: 8px;
             z-index: 5;
         }
-
-        @media (min-width: 768px) {
-            .produto-acoes-footer { padding: 12px 15px; gap: 10px; }
-        }
+        @media (min-width: 768px) { .produto-acoes-footer { padding: 12px 15px; gap: 10px; } }
 
         .card-qtd-controle {
             display: flex;
@@ -686,34 +642,13 @@
             border-radius: 8px;
             padding: 2px 8px;
         }
+        @media (min-width: 768px) { .card-qtd-controle { padding: 4px 10px; } }
 
-        @media (min-width: 768px) {
-            .card-qtd-controle { padding: 4px 10px; }
-        }
+        .card-qtd-btn { background: transparent; border: none; color: var(--primary); font-size: 16px; font-weight: 700; cursor: pointer; padding: 2px 8px; }
+        @media (min-width: 768px) { .card-qtd-btn { font-size: 18px; padding: 2px 12px; } }
 
-        .card-qtd-btn {
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 2px 8px;
-        }
-
-        @media (min-width: 768px) {
-            .card-qtd-btn { font-size: 18px; padding: 2px 12px; }
-        }
-
-        .card-qtd-numero {
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--text-main);
-        }
-
-        @media (min-width: 768px) {
-            .card-qtd-numero { font-size: 15px; }
-        }
+        .card-qtd-numero { font-weight: 700; font-size: 13px; color: var(--text-main); }
+        @media (min-width: 768px) { .card-qtd-numero { font-size: 15px; } }
 
         .btn-add-carrinho {
             display: flex;
@@ -732,15 +667,9 @@
             transition: background 0.3s ease;
             text-transform: uppercase;
         }
+        @media (min-width: 768px) { .btn-add-carrinho { padding: 10px; font-size: 13px; gap: 8px; } }
 
-        @media (min-width: 768px) {
-            .btn-add-carrinho { padding: 10px; font-size: 13px; gap: 8px; }
-        }
-
-        .btn-add-carrinho:hover {
-            background: var(--primary-dark);
-            color: #fff;
-        }
+        .btn-add-carrinho:hover { background: var(--primary-dark); color: #fff; }
 
         /* Barra Flutuante do Carrinho */
         .carrinho-flutuante {
@@ -761,18 +690,9 @@
             z-index: 999;
             transition: transform 0.2s;
         }
+        .carrinho-flutuante:hover { transform: scale(1.05); }
 
-        .carrinho-flutuante:hover {
-            transform: scale(1.05);
-        }
-
-        .badge-qtd {
-            background: #000;
-            color: var(--primary);
-            padding: 2px 8px;
-            border-radius: 50%;
-            font-size: 13px;
-        }
+        .badge-qtd { background: #000; color: var(--primary); padding: 2px 8px; border-radius: 50%; font-size: 13px; }
 
         /* Modais Gerais */
         .modal-overlay {
@@ -811,22 +731,10 @@
             padding-bottom: 10px;
         }
 
-        .modal-header h3 {
-            color: var(--primary);
-            font-size: 20px;
-        }
+        .modal-header h3 { color: var(--primary); font-size: 20px; }
 
-        .btn-fechar-modal {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .btn-fechar-modal:hover {
-            color: var(--text-main);
-        }
+        .btn-fechar-modal { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        .btn-fechar-modal:hover { color: var(--text-main); }
 
         /* Modal Ampliar Imagem */
         .modal-imagem-content {
@@ -842,168 +750,45 @@
             align-items: center;
             box-shadow: 0 15px 50px rgba(0,0,0,0.9);
         }
-
-        .modal-imagem-content img {
-            max-width: 100%;
-            max-height: 75vh;
-            border-radius: 8px;
-            object-fit: contain;
-            background: #000;
-        }
-
+        .modal-imagem-content img { max-width: 100%; max-height: 75vh; border-radius: 8px; object-fit: contain; background: #000; }
         .btn-fechar-img-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--dark-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
+            position: absolute; top: 15px; right: 15px; background: var(--dark-bg); border: 1px solid var(--card-border);
+            color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: background 0.2s;
         }
-
-        .btn-fechar-img-modal:hover {
-            background: var(--danger);
-            color: #fff;
-            border-color: var(--danger);
-        }
+        .btn-fechar-img-modal:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
         .item-carrinho-lista {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--card-border);
-            font-size: 14px;
+            display: flex; justify-content: space-between; align-items: center; padding: 12px 0;
+            border-bottom: 1px solid var(--card-border); font-size: 14px;
         }
 
-        .controle-qtd-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--dark-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 6px;
-            padding: 2px 6px;
-        }
+        .controle-qtd-box { display: flex; align-items: center; gap: 8px; background: var(--dark-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 2px 6px; }
+        .btn-qtd { background: transparent; border: none; color: var(--primary); font-size: 16px; font-weight: 700; cursor: pointer; padding: 2px 6px; }
+        .btn-qtd:hover { color: #fff; }
 
-        .btn-qtd {
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 2px 6px;
-        }
-
-        .btn-qtd:hover {
-            color: #fff;
-        }
-
-        .carrinho-total {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-            text-align: right;
-            margin: 20px 0;
-        }
+        .carrinho-total { font-size: 16px; font-weight: 700; color: var(--text-main); text-align: right; margin: 20px 0 10px 0; }
+        .carrinho-total-pix { font-size: 18px; font-weight: 800; color: var(--pix-color); text-align: right; margin-bottom: 20px; }
 
         /* Gestor itens */
         .item-gerenciador {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: 14px 18px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            color: #fff;
+            background: var(--card-bg); border: 1px solid var(--card-border); padding: 14px 18px;
+            border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; color: #fff;
         }
+        .acoes-gestor { display: flex; gap: 8px; }
+        .btn-editar { background: var(--warning); color: #000; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .btn-excluir { background: var(--danger); color: white; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .sem-produtos { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-standard); }
 
-        .acoes-gestor {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-editar {
-            background: var(--warning);
-            color: #000;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .btn-excluir {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .sem-produtos {
-            text-align: center;
-            grid-column: 1 / -1;
-            padding: 60px 20px;
-            color: var(--text-muted);
-            font-size: 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-standard);
-        }
-
-        .preview-container {
-            margin-top: 12px;
-            background: var(--dark-bg);
-            border: 1px dashed var(--primary);
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-        }
-
-        .preview-box-img, .preview-box-capa {
-            background: #000;
-            margin: 0 auto;
-            border: 1px solid var(--card-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 6px;
-        }
-
+        .preview-container { margin-top: 12px; background: var(--dark-bg); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; text-align: center; display: none; }
+        .preview-box-img, .preview-box-capa { background: #000; margin: 0 auto; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px; }
         .preview-box-img { width: 130px; height: 130px; }
         .preview-box-capa { width: 100%; height: 110px; }
         .preview-box-img img, .preview-box-capa img { width: 100%; height: 100%; }
 
-        .lista-vendedores-gerenciador {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .vendedor-item-box {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .lista-vendedores-gerenciador { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .vendedor-item-box { display: flex; gap: 10px; align-items: center; }
     </style>
 
     <!-- Script do Firebase -->
@@ -1137,7 +922,7 @@
 
                     let grupoHtml = '';
                     if (loja.linkGrupo) {
-                        grupoHtml = `<a href="${loja.linkGrupo}" target="_blank" class="btn-grupo-topo">📢 Entrar no Grupo do WhatsApp</a>`;
+                        grupoHtml = `<a href="${loja.linkGrupo}" target="_blank" class="btn-grupo-topo">📢 Entrar no Grupo</a>`;
                     }
 
                     perfilBox.innerHTML = `
@@ -1145,10 +930,7 @@
                         <div class="loja-info-box">
                             <div class="loja-nome">${loja.nome || 'Perfumaria Árabe'}</div>
                             <div class="loja-desc">${loja.descricao || ''}</div>
-                            <div class="botoes-vendedores-topo">
-                                ${vendedoresHtml}
-                                ${grupoHtml}
-                            </div>
+                            <div class="botoes-vendedores-topo">${vendedoresHtml} ${grupoHtml}</div>
                         </div>
                     `;
                 }
@@ -1175,39 +957,41 @@
                     const id = docSnap.id;
                     produtosGlobais[id] = prod;
 
-                    if (!quantidadesCards[id]) {
-                        quantidadesCards[id] = 1;
-                    }
+                    if (!quantidadesCards[id]) quantidadesCards[id] = 1;
 
                     const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
                     const precoUnitarioNum = calc.valorNumerico;
                     const qtdAtual = quantidadesCards[id];
-                    const subtotalCard = (precoUnitarioNum * qtdAtual).toFixed(2).replace('.', ',');
+                    
+                    const descPix = parseFloat(prod.descontoPix) || 0;
+                    
+                    const subtotalCardNum = precoUnitarioNum * qtdAtual;
+                    const subtotalPixNum = subtotalCardNum - (subtotalCardNum * (descPix / 100));
 
-                    // Montar Item do Carrossel
+                    const subtotalCardStr = subtotalCardNum.toFixed(2).replace('.', ',');
+                    const subtotalPixStr = subtotalPixNum.toFixed(2).replace('.', ',');
+
+                    // Carrossel Item
                     const carItem = document.createElement('div');
                     carItem.className = 'carrossel-item';
                     carItem.onclick = () => {
-                        const elementoCard = document.querySelector(`[data-id="${id}"]`);
-                        if(elementoCard) {
-                            elementoCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
+                        const el = document.querySelector(`[data-id="${id}"]`);
+                        if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     };
                     carItem.innerHTML = `
-                        <div class="carrossel-img-box">
-                            <img src="${prod.imagem}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};" onerror="this.src='https://via.placeholder.com/140x110?text=Sem+Foto'">
-                        </div>
+                        <div class="carrossel-img-box"><img src="${prod.imagem}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};" onerror="this.src='https://via.placeholder.com/140x110?text=Sem+Foto'"></div>
                         <div class="carrossel-nome">${prod.nome}</div>
-                        <div class="carrossel-preco">R$ ${calc.precoFinal}</div>
+                        <div class="carrossel-preco" style="color: ${descPix > 0 ? 'var(--pix-color)' : 'var(--primary)'}">R$ ${descPix > 0 ? subtotalPixStr : calc.precoFinal}</div>
                     `;
                     carrosselTrack.appendChild(carItem);
 
-                    // Montar Card do Catálogo
+                    // Card Item
                     const card = document.createElement('div');
                     card.className = 'produto-card';
                     card.setAttribute('data-id', id);
                     card.setAttribute('data-nome', prod.nome.toLowerCase());
                     card.setAttribute('data-categoria', prod.categoria || 'masculino');
+                    
                     card.innerHTML = `
                         <div class="tag-encomenda">📦 Sob Encomenda</div>
                         ${calc.temDesconto ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
@@ -1220,7 +1004,8 @@
                             ${prod.descricao && prod.descricao.length > 50 ? `<button class="btn-ver-mais" onclick="alternarDescricao('${id}')" id="btn-desc-${id}">Ver mais</button>` : ''}
                             <div class="preco-box">
                                 ${calc.temDesconto ? `<span class="preco-antigo">R$ ${prod.preco}</span>` : ''}
-                                <span class="produto-preco" id="preco-total-card-${id}">R$ ${subtotalCard}</span>
+                                <div class="produto-preco" id="preco-total-card-${id}">R$ ${subtotalCardStr}</div>
+                                ${descPix > 0 ? `<div class="preco-pix" id="preco-pix-card-${id}">R$ ${subtotalPixStr} no PIX</div>` : ''}
                             </div>
                         </div>
                         <div class="produto-acoes-footer">
@@ -1248,9 +1033,7 @@
             document.getElementById('modal-ampliar-imagem').style.display = 'flex';
         }
 
-        window.fecharModalImagem = function() {
-            document.getElementById('modal-ampliar-imagem').style.display = 'none';
-        }
+        window.fecharModalImagem = function() { document.getElementById('modal-ampliar-imagem').style.display = 'none'; }
 
         window.alternarDescricao = function(id) {
             const descEl = document.getElementById(`desc-${id}`);
@@ -1275,11 +1058,8 @@
                 const matchNome = nome.includes(termo);
                 const matchCat = (categoriaSelecionada === 'todos' || cat === categoriaSelecionada);
 
-                if (matchNome && matchCat) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
+                if (matchNome && matchCat) card.style.display = 'flex';
+                else card.style.display = 'none';
             });
         }
 
@@ -1289,8 +1069,18 @@
             if (quantidadesCards[id] < 1) quantidadesCards[id] = 1;
 
             document.getElementById(`qtd-card-num-${id}`).innerText = quantidadesCards[id];
-            let novoSubtotal = (precoUnitario * quantidadesCards[id]).toFixed(2).replace('.', ',');
-            document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${novoSubtotal}`;
+            
+            let novoSubtotal = precoUnitario * quantidadesCards[id];
+            document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${novoSubtotal.toFixed(2).replace('.', ',')}`;
+
+            let descPix = parseFloat(produtosGlobais[id].descontoPix) || 0;
+            if (descPix > 0) {
+                let elPix = document.getElementById(`preco-pix-card-${id}`);
+                if (elPix) {
+                    let novoPix = novoSubtotal - (novoSubtotal * (descPix / 100));
+                    elPix.innerText = `R$ ${novoPix.toFixed(2).replace('.', ',')} no PIX`;
+                }
+            }
         }
 
         window.adicionarComQtdCard = function(id) {
@@ -1309,50 +1099,48 @@
                     nome: produto.nome,
                     precoNum: calc.valorNumerico,
                     precoStr: calc.precoFinal,
-                    quantidade: qtdParaAdicionar
+                    quantidade: qtdParaAdicionar,
+                    descontoPix: parseFloat(produto.descontoPix) || 0
                 });
             }
 
             atualizarCarrinhoUI();
 
+            // Resetar Card
             quantidadesCards[id] = 1;
             document.getElementById(`qtd-card-num-${id}`).innerText = 1;
-            let subInicial = (calc.valorNumerico * 1).toFixed(2).replace('.', ',');
-            document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${subInicial}`;
+            document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${calc.valorNumerico.toFixed(2).replace('.', ',')}`;
+            
+            let descPix = parseFloat(produto.descontoPix) || 0;
+            if (descPix > 0) {
+                let elPix = document.getElementById(`preco-pix-card-${id}`);
+                if (elPix) {
+                    let pixInicial = calc.valorNumerico - (calc.valorNumerico * (descPix / 100));
+                    elPix.innerText = `R$ ${pixInicial.toFixed(2).replace('.', ',')} no PIX`;
+                }
+            }
 
             document.getElementById('texto-aviso-sucesso').innerText = `✅ ${qtdParaAdicionar}x "${produto.nome}" adicionado com sucesso!`;
             document.getElementById('modal-aviso-sucesso').style.display = 'flex';
         }
 
-        window.fecharAvisoContinuar = function() {
-            document.getElementById('modal-aviso-sucesso').style.display = 'none';
-        }
-
-        window.acaoAgendarDoAviso = function() {
-            document.getElementById('modal-aviso-sucesso').style.display = 'none';
-            abrirCarrinhoModal();
-        }
+        window.fecharAvisoContinuar = function() { document.getElementById('modal-aviso-sucesso').style.display = 'none'; }
+        window.acaoAgendarDoAviso = function() { document.getElementById('modal-aviso-sucesso').style.display = 'none'; abrirCarrinhoModal(); }
 
         window.mudarQuantidadeModal = function(id, delta) {
             const item = carrinho.find(i => i.id === id);
             if (item) {
                 item.quantidade += delta;
-                if (item.quantidade <= 0) {
-                    carrinho = carrinho.filter(i => i.id !== id);
-                }
+                if (item.quantidade <= 0) carrinho = carrinho.filter(i => i.id !== id);
             }
             atualizarCarrinhoUI();
-            if(document.getElementById('modal-carrinho').style.display === 'flex') {
-                abrirCarrinhoModal();
-            }
+            if(document.getElementById('modal-carrinho').style.display === 'flex') abrirCarrinhoModal();
         }
 
         window.removerDoCarrinho = function(id) {
             carrinho = carrinho.filter(item => item.id !== id);
             atualizarCarrinhoUI();
-            if(document.getElementById('modal-carrinho').style.display === 'flex') {
-                abrirCarrinhoModal();
-            }
+            if(document.getElementById('modal-carrinho').style.display === 'flex') abrirCarrinhoModal();
         }
 
         function atualizarCarrinhoUI() {
@@ -1370,17 +1158,24 @@
 
         window.abrirCarrinhoModal = function() {
             const listaDiv = document.getElementById('itens-carrinho-modal');
-            const totalDiv = document.getElementById('carrinho-total-modal');
+            const totalNormalDiv = document.getElementById('carrinho-total-normal');
+            const totalPixDiv = document.getElementById('carrinho-total-pix');
             listaDiv.innerHTML = '';
 
             if (carrinho.length === 0) {
                 listaDiv.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding:15px;">Seu carrinho/agendamento está vazio.</p>';
-                totalDiv.innerText = 'Total: R$ 0,00';
+                totalNormalDiv.innerText = 'Total Normal: R$ 0,00';
+                totalPixDiv.innerText = 'Total PIX: R$ 0,00';
             } else {
-                let totalGeral = 0;
+                let totalNormalGeral = 0;
+                let totalPixGeral = 0;
+                
                 carrinho.forEach(item => {
-                    let subtotal = item.precoNum * item.quantidade;
-                    totalGeral += subtotal;
+                    let subtotalNormal = item.precoNum * item.quantidade;
+                    let subtotalPix = subtotalNormal - (subtotalNormal * (item.descontoPix / 100));
+                    
+                    totalNormalGeral += subtotalNormal;
+                    totalPixGeral += subtotalPix;
 
                     const divItem = document.createElement('div');
                     divItem.className = 'item-carrinho-lista';
@@ -1400,28 +1195,23 @@
                     `;
                     listaDiv.appendChild(divItem);
                 });
-                totalDiv.innerText = `Total: R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+                
+                totalNormalDiv.innerText = `Total Normal: R$ ${totalNormalGeral.toFixed(2).replace('.', ',')}`;
+                totalPixDiv.innerText = `Total PIX: R$ ${totalPixGeral.toFixed(2).replace('.', ',')}`;
             }
 
             document.getElementById('modal-carrinho').style.display = 'flex';
         }
 
-        window.fecharCarrinhoModal = function() {
-            document.getElementById('modal-carrinho').style.display = 'none';
-        }
+        window.fecharCarrinhoModal = function() { document.getElementById('modal-carrinho').style.display = 'none'; }
 
         window.prosseguirCheckout = function() {
-            if (carrinho.length === 0) {
-                alert('Adicione produtos antes de continuar.');
-                return;
-            }
+            if (carrinho.length === 0) { alert('Adicione produtos antes de continuar.'); return; }
             document.getElementById('modal-carrinho').style.display = 'none';
             document.getElementById('modal-checkout').style.display = 'flex';
         }
 
-        window.fecharCheckoutModal = function() {
-            document.getElementById('modal-checkout').style.display = 'none';
-        }
+        window.fecharCheckoutModal = function() { document.getElementById('modal-checkout').style.display = 'none'; }
 
         window.finalizarPedidoWhatsApp = function(e) {
             e.preventDefault();
@@ -1430,11 +1220,14 @@
             const telefoneContato = document.getElementById('checkout-telefone').value;
 
             let itensTexto = "";
-            let totalGeral = 0;
+            let totalNormal = 0;
+            let totalPix = 0;
 
             carrinho.forEach(item => {
-                let sub = item.precoNum * item.quantidade;
-                totalGeral += sub;
+                let subN = item.precoNum * item.quantidade;
+                let subP = subN - (subN * (item.descontoPix / 100));
+                totalNormal += subN;
+                totalPix += subP;
                 itensTexto += `• ${item.quantidade}x ${item.nome} (R$ ${item.precoStr} un)\n`;
             });
 
@@ -1448,7 +1241,8 @@
                            `• Nome: ${nome}\n` +
                            `• Contato: ${telefoneContato}\n\n` +
                            `*🛒 Itens Solicitados:*\n${itensTexto}\n` +
-                           `*💰 Valor Total:* R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+                           `*💰 Valor Normal (Cartão/Outros):* R$ ${totalNormal.toFixed(2).replace('.', ',')}\n` +
+                           `*🟩 Valor no PIX (Com Desconto):* R$ ${totalPix.toFixed(2).replace('.', ',')}`;
 
             const urlWpp = `https://wa.me/${whatsappDestino}?text=${encodeURIComponent(mensagem)}`;
             window.open(urlWpp, '_blank');
@@ -1459,7 +1253,7 @@
             const div = document.createElement('div');
             div.className = 'vendedor-item-box';
             div.innerHTML = `
-                <input type="text" placeholder="Nome do Vendedor" class="vendedor-nome" value="${nome}" style="flex:1;" required>
+                <input type="text" placeholder="Nome" class="vendedor-nome" value="${nome}" style="flex:1;" required>
                 <input type="text" placeholder="WhatsApp (DDD+Número)" class="vendedor-tel" value="${telefone}" style="flex:1;" required>
                 <button type="button" onclick="this.parentElement.remove()" style="background:var(--danger); color:#fff; border:none; padding:10px 12px; border-radius:6px; cursor:pointer;">X</button>
             `;
@@ -1479,8 +1273,7 @@
                     
                     if (loja.capa) {
                         imagemCapaBase64 = loja.capa;
-                        const preview = document.getElementById('preview-capa-img');
-                        preview.src = loja.capa;
+                        document.getElementById('preview-capa-img').src = loja.capa;
                         document.getElementById('preview-capa-container').style.display = 'block';
                     }
 
@@ -1525,7 +1318,7 @@
                             </div>
                         </div>
                         <div class="acoes-gestor">
-                            <button class="btn-editar" onclick="prepararEdicao('${id}', '${encodeURIComponent(prod.nome || '')}', '${encodeURIComponent(prod.preco || '')}', '${prod.tipoDesconto || 'porcentagem'}', '${prod.valorDesconto || ''}', '${encodeURIComponent(prod.descricao || '')}', '${prod.ajusteImagem || 'contain'}', '${prod.categoria || 'masculino'}')">Editar</button>
+                            <button class="btn-editar" onclick="prepararEdicao('${id}', '${encodeURIComponent(prod.nome || '')}', '${encodeURIComponent(prod.preco || '')}', '${prod.tipoDesconto || 'porcentagem'}', '${prod.valorDesconto || ''}', '${encodeURIComponent(prod.descricao || '')}', '${prod.ajusteImagem || 'contain'}', '${prod.categoria || 'masculino'}', '${prod.descontoPix || ''}')">Editar</button>
                             <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
                         </div>
                     `;
@@ -1534,13 +1327,14 @@
             } catch (error) { console.error(error); }
         }
 
-        window.prepararEdicao = function(id, nome, preco, tipoDesconto, valorDesconto, descricao, ajusteImagem, categoria) {
+        window.prepararEdicao = function(id, nome, preco, tipoDesconto, valorDesconto, descricao, ajusteImagem, categoria, descontoPix) {
             document.getElementById('produto-id').value = id;
             document.getElementById('nome').value = decodeURIComponent(nome);
             document.getElementById('preco').value = decodeURIComponent(preco);
             document.getElementById('tipo-desconto').value = tipoDesconto || 'porcentagem';
             document.getElementById('valor-desconto').value = valorDesconto || '';
             document.getElementById('categoria').value = categoria || 'masculino';
+            document.getElementById('desconto-pix').value = descontoPix || '';
             document.getElementById('descricao').value = decodeURIComponent(descricao);
             document.getElementById('img-fit').value = ajusteImagem || 'contain';
             document.getElementById('btn-salvar-produto').innerText = 'Atualizar Produto';
@@ -1591,10 +1385,7 @@
                 const telsVendedores = document.querySelectorAll('.vendedor-tel');
                 let listaVendedores = [];
                 for (let i = 0; i < nomesVendedores.length; i++) {
-                    listaVendedores.push({
-                        nome: nomesVendedores[i].value,
-                        telefone: telsVendedores[i].value
-                    });
+                    listaVendedores.push({ nome: nomesVendedores[i].value, telefone: telsVendedores[i].value });
                 }
 
                 const dadosLoja = {
@@ -1607,7 +1398,7 @@
                 };
 
                 await setDoc(doc(db, "config", "perfil_loja"), dadosLoja);
-                alert('Perfil e configurações atualizados com sucesso!');
+                alert('Perfil atualizado com sucesso!');
                 carregarCatalogo();
             });
 
@@ -1620,6 +1411,7 @@
                     tipoDesconto: document.getElementById('tipo-desconto').value,
                     valorDesconto: document.getElementById('valor-desconto').value,
                     categoria: document.getElementById('categoria').value,
+                    descontoPix: document.getElementById('desconto-pix').value,
                     imagem: imagemProdutoBase64,
                     ajusteImagem: document.getElementById('img-fit').value,
                     descricao: document.getElementById('descricao').value,
@@ -1663,18 +1455,15 @@
         <div id="secao-catalogo" class="section active">
             <div id="perfil-loja-container" class="loja-header"></div>
 
-            <!-- Carrossel de Destaques -->
             <div id="carrossel-destaques-container" class="carrossel-container" style="display: none;">
                 <div class="carrossel-titulo">✨ Produtos em Destaque</div>
                 <div id="carrossel-track" class="carrossel-track"></div>
             </div>
 
-            <!-- Barra de Busca -->
             <div class="busca-container">
                 <input type="text" id="input-busca" class="input-busca" placeholder="🔍 Buscar perfume por nome..." oninput="filtrarProdutos()">
             </div>
 
-            <!-- Filtros por Categoria -->
             <div class="categorias-catalogo">
                 <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
                 <button class="cat-btn" onclick="filtrarCategoria('masculino', this)">Masculino</button>
@@ -1697,7 +1486,7 @@
 
             <div id="conteudo-gestor" style="display: none;">
                 <div class="form-card">
-                    <h2>⚙️ Personalização da Loja & Links</h2>
+                    <h2>⚙️ Personalização da Loja</h2>
                     <form id="form-loja">
                         <div class="form-group">
                             <label>Nome da Loja:</label>
@@ -1722,22 +1511,20 @@
                             <textarea id="loja-desc-input" rows="2"></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Link do Grupo do WhatsApp (Opcional):</label>
+                            <label>Link do Grupo do WhatsApp:</label>
                             <input type="url" id="loja-grupo-input" placeholder="https://chat.whatsapp.com/...">
                         </div>
-
                         <div class="form-group">
-                            <label>WhatsApp dos Vendedores (Para dúvidas no topo):</label>
+                            <label>WhatsApp dos Vendedores:</label>
                             <div id="vendedores-container-inputs" class="lista-vendedores-gerenciador"></div>
-                            <button type="button" onclick="adicionarCampoVendedor()" style="background:var(--card-border); color:var(--primary); border:1px solid var(--primary); padding:8px; border-radius:6px; cursor:pointer; width:100%; margin-top:10px; font-weight:600;">+ Adicionar Outro Vendedor</button>
+                            <button type="button" onclick="adicionarCampoVendedor()" style="background:var(--card-border); color:var(--primary); border:1px solid var(--primary); padding:8px; border-radius:6px; cursor:pointer; width:100%; margin-top:10px; font-weight:600;">+ Adicionar Vendedor</button>
                         </div>
-
-                        <button type="submit" class="btn-submit" style="margin-top: 20px;">Salvar Alterações da Loja</button>
+                        <button type="submit" class="btn-submit" style="margin-top: 20px;">Salvar Loja</button>
                     </form>
                 </div>
 
                 <div class="form-card">
-                    <h2>📦 Gerenciamento de Produtos (Por Encomenda)</h2>
+                    <h2>📦 Gerenciamento de Produtos</h2>
                     <form id="form-produto">
                         <input type="hidden" id="produto-id">
                         <div class="form-group">
@@ -1750,18 +1537,17 @@
                                 <input type="text" id="preco" required placeholder="Ex: 160,00">
                             </div>
                             <div class="form-group">
-                                <label>Tipo de Desconto:</label>
-                                <select id="tipo-desconto">
-                                    <option value="porcentagem">Porcentagem (%)</option>
-                                    <option value="dinheiro">Valor Fixo (R$)</option>
-                                </select>
+                                <label>Desconto Promo (Opcional):</label>
+                                <div style="display:flex; gap: 5px;">
+                                    <input type="text" id="valor-desconto" placeholder="Ex: 15" style="flex:2;">
+                                    <select id="tipo-desconto" style="flex:1;">
+                                        <option value="porcentagem">%</option>
+                                        <option value="dinheiro">R$</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group">
-                                <label>Valor do Desconto (Opcional):</label>
-                                <input type="text" id="valor-desconto" placeholder="Ex: 15">
-                            </div>
                             <div class="form-group">
                                 <label>Categoria:</label>
                                 <select id="categoria">
@@ -1770,26 +1556,32 @@
                                     <option value="kids">Kids</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Foto do Produto:</label>
-                            <input type="file" id="produto-file" accept="image/*">
-                        </div>
-                        <div class="form-group">
-                            <label>Ajuste da Imagem:</label>
-                            <select id="img-fit">
-                                <option value="contain">Inteira (Sem cortes)</option>
-                                <option value="cover">Preencher o espaço</option>
-                            </select>
-                            <div id="preview-prod-container" class="preview-container">
-                                <div class="preview-box-img"><img id="preview-prod-img" alt="Preview Produto"></div>
+                            <div class="form-group">
+                                <label>Desconto no PIX (%):</label>
+                                <input type="number" id="desconto-pix" placeholder="Ex: 10" min="0" max="100">
                             </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Foto do Produto:</label>
+                                <input type="file" id="produto-file" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label>Ajuste da Imagem:</label>
+                                <select id="img-fit">
+                                    <option value="contain">Inteira</option>
+                                    <option value="cover">Preencher</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="preview-prod-container" class="preview-container">
+                            <div class="preview-box-img"><img id="preview-prod-img" alt="Preview"></div>
                         </div>
                         <div class="form-group">
                             <label>Descrição:</label>
-                            <textarea id="descricao" rows="3" required placeholder="Ex: Perfume importado sob encomenda. Prazo de entrega de 15 dias..."></textarea>
+                            <textarea id="descricao" rows="3" required placeholder="Ex: Perfume importado..."></textarea>
                         </div>
-                        <button type="submit" id="btn-salvar-produto" class="btn-submit">Salvar Produto no Catálogo</button>
+                        <button type="submit" id="btn-salvar-produto" class="btn-submit">Salvar Produto</button>
                     </form>
                 </div>
                 
@@ -1801,50 +1593,51 @@
         </div>
     </div>
 
-    <!-- Botão Carrinho Flutuante -->
+    <!-- Carrinho Flutuante -->
     <div id="carrinho-flutuante" class="carrinho-flutuante" style="display: none;" onclick="abrirCarrinhoModal()">
         🛒 Ver Carrinho <span id="contador-carrinho" class="badge-qtd">0</span>
     </div>
 
-    <!-- Modal para Ampliar a Imagem -->
+    <!-- Modais -->
     <div id="modal-ampliar-imagem" class="modal-overlay">
         <div class="modal-imagem-content">
             <button class="btn-fechar-img-modal" onclick="fecharModalImagem()">&times;</button>
-            <h3 id="titulo-imagem-ampliada" style="color: var(--primary); margin-bottom: 15px; font-size: 16px; text-align: center; padding-right: 30px;"></h3>
-            <img id="imagem-ampliada" src="" alt="Imagem Ampliada">
+            <h3 id="titulo-imagem-ampliada" style="color: var(--primary); margin-bottom: 15px; font-size: 16px; text-align: center;"></h3>
+            <img id="imagem-ampliada" src="" alt="Ampliada">
         </div>
     </div>
 
-    <!-- Modal Personalizado de Confirmação (Continuar / Agendar) -->
     <div id="modal-aviso-sucesso" class="modal-overlay">
         <div class="modal-content" style="text-align: center; max-width: 400px;">
             <h3 style="color: var(--primary); margin-bottom: 15px;">Produto Adicionado!</h3>
             <p id="texto-aviso-sucesso" style="font-size: 15px; margin-bottom: 25px; color: var(--text-main);"></p>
             <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="fecharAvisoContinuar()" style="flex: 1; background: var(--card-border); color: var(--text-main); border: 1px solid var(--primary); padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px;">Continuar</button>
-                <button type="button" onclick="acaoAgendarDoAviso()" style="flex: 1; background: var(--primary); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 13px;">Agendar</button>
+                <button type="button" onclick="fecharAvisoContinuar()" style="flex: 1; background: var(--card-border); color: var(--text-main); border: 1px solid var(--primary); padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase;">Continuar</button>
+                <button type="button" onclick="acaoAgendarDoAviso()" style="flex: 1; background: var(--primary); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase;">Carrinho</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal do Carrinho / Agendamento -->
     <div id="modal-carrinho" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Seu Carrinho / Agendamento</h3>
+                <h3>Carrinho / Agendamento</h3>
                 <button class="btn-fechar-modal" onclick="fecharCarrinhoModal()">&times;</button>
             </div>
             <div id="itens-carrinho-modal"></div>
-            <div id="carrinho-total-modal" class="carrinho-total">Total: R$ 0,00</div>
+            
+            <!-- Totais separados -->
+            <div id="carrinho-total-normal" class="carrinho-total">Total Normal: R$ 0,00</div>
+            <div id="carrinho-total-pix" class="carrinho-total-pix">Total PIX: R$ 0,00</div>
+            
             <button class="btn-submit" onclick="prosseguirCheckout()">Avançar para Envio ➔</button>
         </div>
     </div>
 
-    <!-- Modal de Checkout Simplificado -->
     <div id="modal-checkout" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Finalizar Pedido / Agendamento</h3>
+                <h3>Finalizar Pedido</h3>
                 <button class="btn-fechar-modal" onclick="fecharCheckoutModal()">&times;</button>
             </div>
             <form onsubmit="finalizarPedidoWhatsApp(event)">
@@ -1853,7 +1646,7 @@
                     <input type="text" id="checkout-nome" required placeholder="Ex: João da Silva">
                 </div>
                 <div class="form-group">
-                    <label>Seu WhatsApp (Contato):</label>
+                    <label>Seu WhatsApp:</label>
                     <input type="text" id="checkout-telefone" required placeholder="Ex: (21) 99999-9999">
                 </div>
                 <button type="submit" class="btn-submit" style="background: var(--whatsapp); color:#fff; margin-top: 15px;">Enviar Pedido via WhatsApp 🚀</button>
