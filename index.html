@@ -809,7 +809,8 @@
         .modal-imagem-content {
             background: var(--card-bg);
             border: 1px solid var(--primary);
-            max-width: 90vw;
+            width: 100%;
+            max-width: 500px;
             max-height: 90vh;
             border-radius: var(--radius-standard);
             padding: 20px;
@@ -819,11 +820,25 @@
             align-items: center;
             box-shadow: 0 15px 50px rgba(0,0,0,0.9);
         }
-        .modal-imagem-content img { max-width: 100%; max-height: 75vh; border-radius: 8px; object-fit: contain; background: #000; }
+        
+        .modal-img-container {
+            width: 100%;
+            height: 350px;
+            background: #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-imagem-content img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        
         .btn-fechar-img-modal {
             position: absolute; top: 15px; right: 15px; background: var(--dark-bg); border: 1px solid var(--card-border);
             color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+            display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10;
         }
         .btn-fechar-img-modal:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
@@ -853,7 +868,7 @@
         .sem-produtos { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-standard); }
 
         .preview-container { margin-top: 12px; background: var(--dark-bg); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; text-align: center; display: none; }
-        .preview-box-img, .preview-box-capa { background: #000; margin: 0 auto; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px; }
+        .preview-box-img, .preview-box-capa { background: #000; margin: 0 auto; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px; position: relative; }
         .preview-box-img { width: 130px; height: 130px; }
         .preview-box-capa { width: 100%; height: 110px; }
         .preview-box-img img, .preview-box-capa img { width: 100%; height: 100%; }
@@ -884,6 +899,7 @@
         let produtosGlobais = {}; 
         let quantidadesCards = {}; 
         let cardIndicesImagens = {}; 
+        let modalZoomAtualId = null;
         let dadosLojaGlobal = null;
         let imagemCapaBase64 = "";
         let imagensProdutoBase64 = ["", "", ""];
@@ -898,6 +914,18 @@
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 callback(null, index);
+            }
+        }
+
+        window.removerFotoProduto = function(index) {
+            imagensProdutoBase64[index] = "";
+            document.getElementById(`produto-file-${index + 1}`).value = "";
+            document.getElementById(`preview-prod-img-${index + 1}`).src = "";
+            
+            // Se todas estiverem vazias, esconde a caixa de prévia geral
+            const temAlguma = imagensProdutoBase64.some(img => img !== "");
+            if(!temAlguma) {
+                document.getElementById('preview-prod-container').style.display = 'none';
             }
         }
 
@@ -1074,7 +1102,6 @@
                     let imgInicial = listaImagens[0] || 'https://via.placeholder.com/280x230?text=Sem+Foto';
                     const disponivel = prod.status !== 'indisponivel';
 
-                    // Apenas adiciona ao carrossel se estiver disponível
                     if (disponivel) {
                         const carItem = document.createElement('div');
                         carItem.className = 'carrossel-item';
@@ -1178,18 +1205,63 @@
         window.ampliarImagemAtual = function(id) {
             const prod = produtosGlobais[id];
             if(!prod) return;
+            modalZoomAtualId = id;
             let idx = cardIndicesImagens[id] || 0;
-            let imgUrl = prod.listaImagens[idx] || prod.imagem;
-            ampliarImagem(imgUrl, prod.nome);
-        }
-
-        window.ampliarImagem = function(urlImagem, nomeProduto) {
-            document.getElementById('imagem-ampliada').src = urlImagem;
-            document.getElementById('titulo-imagem-ampliada').innerText = nomeProduto;
+            atualizarModalZoomUI(idx);
             document.getElementById('modal-ampliar-imagem').style.display = 'flex';
         }
 
-        window.fecharModalImagem = function() { document.getElementById('modal-ampliar-imagem').style.display = 'none'; }
+        window.mudarFotoModalZoom = function(direcao) {
+            if(!modalZoomAtualId) return;
+            const prod = produtosGlobais[modalZoomAtualId];
+            if(!prod || !prod.listaImagens || prod.listaImagens.length <= 1) return;
+
+            let idx = cardIndicesImagens[modalZoomAtualId] || 0;
+            idx += direcao;
+            if (idx < 0) idx = prod.listaImagens.length - 1;
+            if (idx >= prod.listaImagens.length) idx = 0;
+            cardIndicesImagens[modalZoomAtualId] = idx;
+
+            document.getElementById(`img-card-${modalZoomAtualId}`).src = prod.listaImagens[idx];
+            const dotsContainer = document.getElementById(`dots-${modalZoomAtualId}`);
+            if(dotsContainer) {
+                const dots = dotsContainer.children;
+                for(let i=0; i<dots.length; i++) {
+                    dots[i].className = `card-img-dot ${i === idx ? 'active' : ''}`;
+                }
+            }
+
+            atualizarModalZoomUI(idx);
+        }
+
+        function atualizarModalZoomUI(idx) {
+            const prod = produtosGlobais[modalZoomAtualId];
+            if(!prod) return;
+            
+            document.getElementById('titulo-imagem-ampliada').innerText = prod.nome;
+            document.getElementById('imagem-ampliada').src = prod.listaImagens[idx] || prod.imagem;
+
+            const modalNavBox = document.getElementById('modal-zoom-nav-box');
+            if (prod.listaImagens && prod.listaImagens.length > 1) {
+                let dotsHtml = '';
+                for(let i=0; i<prod.listaImagens.length; i++) {
+                    dotsHtml += `<div class="card-img-dot ${i === idx ? 'active' : ''}"></div>`;
+                }
+                modalNavBox.innerHTML = `
+                    <button class="card-img-btn card-img-prev" style="position:static; transform:none;" onclick="mudarFotoModalZoom(-1)">&#10094;</button>
+                    <div style="display:flex; gap:6px; align-items:center;">${dotsHtml}</div>
+                    <button class="card-img-btn card-img-next" style="position:static; transform:none;" onclick="mudarFotoModalZoom(1)">&#10095;</button>
+                `;
+                modalNavBox.style.display = 'flex';
+            } else {
+                modalNavBox.style.display = 'none';
+            }
+        }
+
+        window.fecharModalImagem = function() { 
+            document.getElementById('modal-ampliar-imagem').style.display = 'none'; 
+            modalZoomAtualId = null;
+        }
 
         window.alternarDescricao = function(id) {
             const descEl = document.getElementById(`desc-${id}`);
@@ -1603,6 +1675,10 @@
                 
                 imagensProdutoBase64 = ["", "", ""];
                 document.getElementById('preview-prod-container').style.display = 'none';
+                for(let k=1; k<=3; k++) {
+                    document.getElementById(`produto-file-${k}`).value = "";
+                    document.getElementById(`preview-prod-img-${k}`).src = "";
+                }
 
                 let imgs = prod.imagens && Array.isArray(prod.imagens) ? prod.imagens : [prod.imagem];
                 for(let i=0; i<3; i++) {
@@ -1722,6 +1798,10 @@
                 this.reset();
                 document.getElementById('produto-id').value = '';
                 imagensProdutoBase64 = ["", "", ""];
+                for(let k=1; k<=3; k++) {
+                    document.getElementById(`produto-file-${k}`).value = "";
+                    document.getElementById(`preview-prod-img-${k}`).src = "";
+                }
                 document.getElementById('btn-salvar-produto').innerText = 'Salvar Produto no Catálogo';
                 document.getElementById('preview-prod-container').style.display = 'none';
                 carregarGerenciador();
@@ -1888,7 +1968,7 @@
                             </div>
                         </div>
 
-                        <!-- Até 3 Imagens do Produto -->
+                        <!-- Até 3 Imagens do Produto com Botão de Remover -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Foto 1 (Principal):</label>
@@ -1914,10 +1994,19 @@
 
                         <div id="preview-prod-container" class="preview-container">
                             <p style="font-size:12px; color:var(--primary); margin-bottom:8px;">Prévia das imagens enviadas:</p>
-                            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                                <div class="preview-box-img"><img id="preview-prod-img-1" alt="Preview 1"></div>
-                                <div class="preview-box-img"><img id="preview-prod-img-2" alt="Preview 2"></div>
-                                <div class="preview-box-img"><img id="preview-prod-img-3" alt="Preview 3"></div>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <div style="text-align: center;">
+                                    <div class="preview-box-img"><img id="preview-prod-img-1" alt="Preview 1"></div>
+                                    <button type="button" onclick="removerFotoProduto(0)" style="background:var(--danger); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; margin-top:6px;">🗑️ Remover 1</button>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div class="preview-box-img"><img id="preview-prod-img-2" alt="Preview 2"></div>
+                                    <button type="button" onclick="removerFotoProduto(1)" style="background:var(--danger); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; margin-top:6px;">🗑️ Remover 2</button>
+                                </div>
+                                <div style="text-align: center;">
+                                    <div class="preview-box-img"><img id="preview-prod-img-3" alt="Preview 3"></div>
+                                    <button type="button" onclick="removerFotoProduto(2)" style="background:var(--danger); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; margin-top:6px;">🗑️ Remover 3</button>
+                                </div>
                             </div>
                         </div>
 
@@ -1932,7 +2021,6 @@
                 <div style="margin-top: 40px; max-width: 650px; margin: 0 auto;">
                     <h3 style="color: var(--primary); margin-bottom: 15px;">Produtos Cadastrados</h3>
                     
-                    <!-- Barra de Busca e Filtro de Status para o Gestor -->
                     <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                         <input type="text" id="busca-gestor" placeholder="🔍 Filtrar produtos cadastrados..." oninput="filtrarGestorProdutos()" style="flex: 2;">
                         <select id="filtro-status-gestor" onchange="filtrarGestorProdutos()" style="flex: 1;">
@@ -1957,8 +2045,14 @@
     <div id="modal-ampliar-imagem" class="modal-overlay">
         <div class="modal-imagem-content">
             <button class="btn-fechar-img-modal" onclick="fecharModalImagem()">&times;</button>
-            <h3 id="titulo-imagem-ampliada" style="color: var(--primary); margin-bottom: 15px; font-size: 16px; text-align: center;"></h3>
-            <img id="imagem-ampliada" src="" alt="Ampliada">
+            <h3 id="titulo-imagem-ampliada" style="color: var(--primary); margin-bottom: 15px; font-size: 16px; text-align: center; padding-right: 30px;"></h3>
+            
+            <div class="modal-img-container">
+                <img id="imagem-ampliada" src="" alt="Ampliada">
+            </div>
+
+            <div id="modal-zoom-nav-box" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 15px; padding: 0 10px;">
+            </div>
         </div>
     </div>
 
