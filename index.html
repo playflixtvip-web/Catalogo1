@@ -253,13 +253,17 @@
             color: var(--primary);
         }
 
-        /* Barra de Busca */
-        .busca-container {
+        /* Barra de Busca e Filtros de Marcas */
+        .filtros-busca-box {
+            display: flex;
+            gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .input-busca {
-            width: 100%;
+            flex: 2;
+            min-width: 220px;
             padding: 14px 18px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -269,7 +273,20 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        .input-busca:focus {
+        .select-marca {
+            flex: 1;
+            min-width: 160px;
+            padding: 14px 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-standard);
+            color: var(--text-main);
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+
+        .input-busca:focus, .select-marca:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px var(--primary-light);
@@ -505,25 +522,8 @@
             justify-content: center;
             overflow: hidden;
             border-bottom: 1px solid var(--card-border);
-            cursor: pointer;
             position: relative;
         }
-
-        .produto-img-box::after {
-            content: '🔍';
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .produto-img-box:hover::after { opacity: 1; }
 
         @media (min-width: 768px) { .produto-img-box { height: 230px; } }
 
@@ -531,19 +531,73 @@
             width: 100%;
             height: 100%;
             transition: transform 0.5s ease;
+            cursor: pointer;
         }
 
         .produto-card:hover .produto-img { transform: scale(1.05); }
+
+        /* Controles do Carrossel de Imagens no Card */
+        .card-img-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            z-index: 3;
+            transition: background 0.2s;
+        }
+        .card-img-btn:hover { background: var(--primary); color: #000; }
+        .card-img-prev { left: 8px; }
+        .card-img-next { right: 8px; }
+
+        .card-img-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4px;
+            z-index: 3;
+        }
+        .card-img-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+        }
+        .card-img-dot.active {
+            background: var(--primary);
+            width: 14px;
+            border-radius: 3px;
+        }
 
         .produto-info {
             padding: 12px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding-bottom: 115px; /* Ajustado para caber o PIX */
+            padding-bottom: 115px;
         }
 
         @media (min-width: 768px) { .produto-info { padding: 20px; padding-bottom: 125px; } }
+
+        .produto-marca {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
 
         .produto-nome {
             font-size: 14px;
@@ -603,7 +657,7 @@
         .produto-preco {
             font-size: 16px;
             font-weight: 700;
-            color: var(--text-main); /* Mudado para branco para destacar o Pix */
+            color: var(--text-main);
             display: inline-block;
         }
         @media (min-width: 768px) { .produto-preco { font-size: 18px; } }
@@ -617,7 +671,7 @@
         }
         @media (min-width: 768px) { .preco-pix { font-size: 16px; } }
 
-        /* Rodapé fixo do card com seletor de quantidade e botão próprio */
+        /* Rodapé fixo do card */
         .produto-acoes-footer {
             position: absolute;
             bottom: 0;
@@ -812,19 +866,21 @@
         let carrinho = [];
         let produtosGlobais = {}; 
         let quantidadesCards = {}; 
+        let cardIndicesImagens = {}; 
         let dadosLojaGlobal = null;
         let imagemCapaBase64 = "";
-        let imagemProdutoBase64 = "";
+        let imagensProdutoBase64 = ["", "", ""];
         let categoriaSelecionada = 'todos';
+        let marcaSelecionada = 'todas';
 
-        function converterParaBase64(fileInputId, callback) {
+        function converterParaBase64(fileInputId, index, callback) {
             const fileInput = document.getElementById(fileInputId);
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) { callback(e.target.result); };
+                reader.onload = function(e) { callback(e.target.result, index); };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                callback(null);
+                callback(null, index);
             }
         }
 
@@ -848,6 +904,7 @@
                 document.getElementById('tela-login').style.display = 'none';
                 document.getElementById('conteudo-gestor').style.display = 'block';
                 carregarGerenciador();
+                carregarMarcasGestor();
                 carregarDadosLojaNoForm();
             } else {
                 alert('Senha incorreta!');
@@ -897,12 +954,29 @@
             filtrarProdutos();
         }
 
+        window.filtrarPorMarca = function() {
+            marcaSelecionada = document.getElementById('select-filtro-marca').value;
+            filtrarProdutos();
+        }
+
         async function carregarCatalogo() {
             const perfilBox = document.getElementById('perfil-loja-container');
             const container = document.getElementById('lista-catalogo');
             const carrosselContainer = document.getElementById('carrossel-destaques-container');
             const carrosselTrack = document.getElementById('carrossel-track');
+            const selectFiltroMarca = document.getElementById('select-filtro-marca');
             if (!container) return;
+
+            try {
+                const marcasSnap = await getDocs(collection(db, "marcas"));
+                let marcaOptions = '<option value="todas">Todas as Marcas</option>';
+                marcasSnap.forEach(mDoc => {
+                    const mData = mDoc.data();
+                    marcaOptions += `<option value="${mData.nome}">${mData.nome}</option>`;
+                });
+                selectFiltroMarca.innerHTML = marcaOptions;
+                selectFiltroMarca.value = marcaSelecionada;
+            } catch(e) { console.error(e); }
 
             try {
                 const docSnap = await getDoc(doc(db, "config", "perfil_loja"));
@@ -958,11 +1032,20 @@
                     produtosGlobais[id] = prod;
 
                     if (!quantidadesCards[id]) quantidadesCards[id] = 1;
+                    if (cardIndicesImagens[id] === undefined) cardIndicesImagens[id] = 0;
+
+                    let listaImagens = [];
+                    if (prod.imagens && Array.isArray(prod.imagens)) {
+                        listaImagens = prod.imagens.filter(img => img && img.trim() !== "");
+                    }
+                    if (listaImagens.length === 0 && prod.imagem) {
+                        listaImagens = [prod.imagem];
+                    }
+                    prod.listaImagens = listaImagens;
 
                     const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
                     const precoUnitarioNum = calc.valorNumerico;
                     const qtdAtual = quantidadesCards[id];
-                    
                     const descPix = parseFloat(prod.descontoPix) || 0;
                     
                     const subtotalCardNum = precoUnitarioNum * qtdAtual;
@@ -971,7 +1054,8 @@
                     const subtotalCardStr = subtotalCardNum.toFixed(2).replace('.', ',');
                     const subtotalPixStr = subtotalPixNum.toFixed(2).replace('.', ',');
 
-                    // Carrossel Item
+                    let imgInicial = listaImagens[0] || 'https://via.placeholder.com/280x230?text=Sem+Foto';
+
                     const carItem = document.createElement('div');
                     carItem.className = 'carrossel-item';
                     carItem.onclick = () => {
@@ -979,26 +1063,43 @@
                         if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     };
                     carItem.innerHTML = `
-                        <div class="carrossel-img-box"><img src="${prod.imagem}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};" onerror="this.src='https://via.placeholder.com/140x110?text=Sem+Foto'"></div>
+                        <div class="carrossel-img-box"><img src="${imgInicial}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};"></div>
                         <div class="carrossel-nome">${prod.nome}</div>
                         <div class="carrossel-preco" style="color: ${descPix > 0 ? 'var(--pix-color)' : 'var(--primary)'}">R$ ${descPix > 0 ? subtotalPixStr : calc.precoFinal}</div>
                     `;
                     carrosselTrack.appendChild(carItem);
 
-                    // Card Item
+                    let dotsHtml = '';
+                    let arrowsHtml = '';
+                    if (listaImagens.length > 1) {
+                        arrowsHtml = `
+                            <button class="card-img-btn card-img-prev" onclick="mudarFotoCard('${id}', -1, event)">&#10094;</button>
+                            <button class="card-img-btn card-img-next" onclick="mudarFotoCard('${id}', 1, event)">&#10095;</button>
+                        `;
+                        dotsHtml = `<div class="card-img-dots" id="dots-${id}">`;
+                        for(let i=0; i<listaImagens.length; i++) {
+                            dotsHtml += `<div class="card-img-dot ${i === 0 ? 'active' : ''}"></div>`;
+                        }
+                        dotsHtml += `</div>`;
+                    }
+
                     const card = document.createElement('div');
                     card.className = 'produto-card';
                     card.setAttribute('data-id', id);
-                    card.setAttribute('data-nome', prod.nome.toLowerCase());
+                    card.setAttribute('data-nome', (prod.nome || '').toLowerCase());
                     card.setAttribute('data-categoria', prod.categoria || 'masculino');
+                    card.setAttribute('data-marca', prod.marca || '');
                     
                     card.innerHTML = `
                         <div class="tag-encomenda">📦 Sob Encomenda</div>
                         ${calc.temDesconto ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
-                        <div class="produto-img-box" onclick="ampliarImagem('${prod.imagem}', '${prod.nome.replace(/'/g, "\\'")}')">
-                            <img src="${prod.imagem}" alt="${prod.nome}" class="produto-img" style="object-fit: ${prod.ajusteImagem || 'contain'};" onerror="this.src='https://via.placeholder.com/280x230?text=Sem+Foto'">
+                        <div class="produto-img-box" onclick="ampliarImagemAtual('${id}')">
+                            ${arrowsHtml}
+                            <img src="${imgInicial}" alt="${prod.nome}" class="produto-img" id="img-card-${id}" style="object-fit: ${prod.ajusteImagem || 'contain'};">
+                            ${dotsHtml}
                         </div>
                         <div class="produto-info">
+                            ${prod.marca ? `<div class="produto-marca">${prod.marca}</div>` : ''}
                             <div class="produto-nome">${prod.nome}</div>
                             <div class="produto-desc" id="desc-${id}">${prod.descricao || ''}</div>
                             ${prod.descricao && prod.descricao.length > 50 ? `<button class="btn-ver-mais" onclick="alternarDescricao('${id}')" id="btn-desc-${id}">Ver mais</button>` : ''}
@@ -1025,6 +1126,36 @@
                 console.error(error);
                 container.innerHTML = '<div class="sem-produtos">Erro ao carregar os produtos.</div>';
             }
+        }
+
+        window.mudarFotoCard = function(id, direcao, event) {
+            if(event) event.stopPropagation();
+            const prod = produtosGlobais[id];
+            if (!prod || !prod.listaImagens || prod.listaImagens.length <= 1) return;
+
+            let idx = cardIndicesImagens[id] || 0;
+            idx += direcao;
+            if (idx < 0) idx = prod.listaImagens.length - 1;
+            if (idx >= prod.listaImagens.length) idx = 0;
+            cardIndicesImagens[id] = idx;
+
+            document.getElementById(`img-card-${id}`).src = prod.listaImagens[idx];
+
+            const dotsContainer = document.getElementById(`dots-${id}`);
+            if(dotsContainer) {
+                const dots = dotsContainer.children;
+                for(let i=0; i<dots.length; i++) {
+                    dots[i].className = `card-img-dot ${i === idx ? 'active' : ''}`;
+                }
+            }
+        }
+
+        window.ampliarImagemAtual = function(id) {
+            const prod = produtosGlobais[id];
+            if(!prod) return;
+            let idx = cardIndicesImagens[id] || 0;
+            let imgUrl = prod.listaImagens[idx] || prod.imagem;
+            ampliarImagem(imgUrl, prod.nome);
         }
 
         window.ampliarImagem = function(urlImagem, nomeProduto) {
@@ -1054,11 +1185,13 @@
             cards.forEach(card => {
                 const nome = card.getAttribute('data-nome');
                 const cat = card.getAttribute('data-categoria');
+                const marca = card.getAttribute('data-marca');
                 
                 const matchNome = nome.includes(termo);
                 const matchCat = (categoriaSelecionada === 'todos' || cat === categoriaSelecionada);
+                const matchMarca = (marcaSelecionada === 'todas' || marca === marcaSelecionada);
 
-                if (matchNome && matchCat) card.style.display = 'flex';
+                if (matchNome && matchCat && matchMarca) card.style.display = 'flex';
                 else card.style.display = 'none';
             });
         }
@@ -1106,7 +1239,6 @@
 
             atualizarCarrinhoUI();
 
-            // Resetar Card
             quantidadesCards[id] = 1;
             document.getElementById(`qtd-card-num-${id}`).innerText = 1;
             document.getElementById(`preco-total-card-${id}`).innerText = `R$ ${calc.valorNumerico.toFixed(2).replace('.', ',')}`;
@@ -1288,6 +1420,60 @@
             } catch (e) { console.error(e); }
         }
 
+        window.salvarMarca = async function(e) {
+            e.preventDefault();
+            const nomeMarca = document.getElementById('nova-marca-input').value.trim();
+            if(!nomeMarca) return;
+            try {
+                await addDoc(collection(db, "marcas"), { nome: nomeMarca });
+                document.getElementById('nova-marca-input').value = '';
+                carregarMarcasGestor();
+            } catch(err) { alert('Erro ao salvar marca'); }
+        }
+
+        async function carregarMarcasGestor() {
+            const listaMarcasDiv = document.getElementById('lista-marcas-gerenciador');
+            const selectProdutoMarca = document.getElementById('marca-produto');
+            if(!listaMarcasDiv) return;
+
+            listaMarcasDiv.innerHTML = '<p style="color:var(--text-muted)">Carregando...</p>';
+            try {
+                const querySnapshot = await getDocs(collection(db, "marcas"));
+                listaMarcasDiv.innerHTML = '';
+                let optionsHtml = '<option value="">Sem Marca</option>';
+
+                if(querySnapshot.empty) {
+                    listaMarcasDiv.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">Nenhuma marca cadastrada.</p>';
+                }
+
+                querySnapshot.forEach(mDoc => {
+                    const mData = mDoc.data();
+                    const mId = mDoc.id;
+                    optionsHtml += `<option value="${mData.nome}">${mData.nome}</option>`;
+
+                    const div = document.createElement('div');
+                    div.className = 'item-gerenciador';
+                    div.style.padding = '8px 14px';
+                    div.innerHTML = `
+                        <span style="font-weight:600; font-size:14px;">${mData.nome}</span>
+                        <button type="button" class="btn-excluir" onclick="deletarMarca('${mId}')">Excluir</button>
+                    `;
+                    listaMarcasDiv.appendChild(div);
+                });
+
+                selectProdutoMarca.innerHTML = optionsHtml;
+            } catch(e) { console.error(e); }
+        }
+
+        window.deletarMarca = async function(id) {
+            if(confirm('Deseja excluir esta marca?')) {
+                try {
+                    await deleteDoc(doc(db, "marcas", id));
+                    carregarMarcasGestor();
+                } catch(e) { alert('Erro ao excluir marca.'); }
+            }
+        }
+
         async function carregarGerenciador() {
             const container = document.getElementById('lista-gerenciador');
             if (!container) return;
@@ -1306,19 +1492,20 @@
                     const id = docSnap.id;
                     const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
                     const precoMostra = calc.temDesconto ? `R$ ${calc.precoFinal} (Promo)` : `R$ ${prod.preco}`;
+                    let imgCapa = (prod.imagens && prod.imagens[0]) ? prod.imagens[0] : (prod.imagem || 'https://via.placeholder.com/45');
 
                     const item = document.createElement('div');
                     item.className = 'item-gerenciador';
                     item.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <img src="${prod.imagem}" style="width: 45px; height: 45px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/45'">
+                            <img src="${imgCapa}" style="width: 45px; height: 45px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/45'">
                             <div>
-                                <strong style="color: var(--text-main);">${prod.nome}</strong><br>
-                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} (${prod.categoria || 'masculino'})</span>
+                                <strong style="color: var(--text-main);">${prod.nome || 'Produto Sem Nome'}</strong><br>
+                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span>
                             </div>
                         </div>
                         <div class="acoes-gestor">
-                            <button class="btn-editar" onclick="prepararEdicao('${id}', '${encodeURIComponent(prod.nome || '')}', '${encodeURIComponent(prod.preco || '')}', '${prod.tipoDesconto || 'porcentagem'}', '${prod.valorDesconto || ''}', '${encodeURIComponent(prod.descricao || '')}', '${prod.ajusteImagem || 'contain'}', '${prod.categoria || 'masculino'}', '${prod.descontoPix || ''}')">Editar</button>
+                            <button class="btn-editar" onclick="prepararEdicao('${id}')">Editar</button>
                             <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
                         </div>
                     `;
@@ -1327,18 +1514,46 @@
             } catch (error) { console.error(error); }
         }
 
-        window.prepararEdicao = function(id, nome, preco, tipoDesconto, valorDesconto, descricao, ajusteImagem, categoria, descontoPix) {
-            document.getElementById('produto-id').value = id;
-            document.getElementById('nome').value = decodeURIComponent(nome);
-            document.getElementById('preco').value = decodeURIComponent(preco);
-            document.getElementById('tipo-desconto').value = tipoDesconto || 'porcentagem';
-            document.getElementById('valor-desconto').value = valorDesconto || '';
-            document.getElementById('categoria').value = categoria || 'masculino';
-            document.getElementById('desconto-pix').value = descontoPix || '';
-            document.getElementById('descricao').value = decodeURIComponent(descricao);
-            document.getElementById('img-fit').value = ajusteImagem || 'contain';
-            document.getElementById('btn-salvar-produto').innerText = 'Atualizar Produto';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Função corrigida: Busca direto no Firebase para garantir que mesmo produtos antigos abram perfeitamente
+        window.prepararEdicao = async function(id) {
+            try {
+                const docSnap = await getDoc(doc(db, "produtos", id));
+                if (!docSnap.exists()) {
+                    alert("Produto não encontrado.");
+                    return;
+                }
+                const prod = docSnap.data();
+
+                document.getElementById('produto-id').value = id;
+                document.getElementById('nome').value = prod.nome || '';
+                document.getElementById('preco').value = prod.preco || '';
+                document.getElementById('tipo-desconto').value = prod.tipoDesconto || 'porcentagem';
+                document.getElementById('valor-desconto').value = prod.valorDesconto || '';
+                document.getElementById('categoria').value = prod.categoria || 'masculino';
+                document.getElementById('marca-produto').value = prod.marca || '';
+                document.getElementById('desconto-pix').value = prod.descontoPix || '';
+                document.getElementById('descricao').value = prod.descricao || '';
+                document.getElementById('img-fit').value = prod.ajusteImagem || 'contain';
+                
+                imagensProdutoBase64 = ["", "", ""];
+                document.getElementById('preview-prod-container').style.display = 'none';
+
+                let imgs = prod.imagens && Array.isArray(prod.imagens) ? prod.imagens : [prod.imagem];
+                for(let i=0; i<3; i++) {
+                    if(imgs[i]) {
+                        imagensProdutoBase64[i] = imgs[i];
+                        const imgPrevEl = document.getElementById(`preview-prod-img-${i+1}`);
+                        if(imgPrevEl) imgPrevEl.src = imgs[i];
+                        document.getElementById('preview-prod-container').style.display = 'block';
+                    }
+                }
+
+                document.getElementById('btn-salvar-produto').innerText = 'Atualizar Produto';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch(err) {
+                console.error(err);
+                alert("Erro ao carregar dados para edição.");
+            }
         }
 
         window.deletarProduto = async function(id) {
@@ -1355,7 +1570,7 @@
             const capaFile = document.getElementById('loja-capa-file');
             if (capaFile) {
                 capaFile.addEventListener('change', () => {
-                    converterParaBase64('loja-capa-file', (base64) => {
+                    converterParaBase64('loja-capa-file', 0, (base64) => {
                         if (base64) {
                             imagemCapaBase64 = base64;
                             document.getElementById('preview-capa-img').src = base64;
@@ -1365,17 +1580,19 @@
                 });
             }
 
-            const prodFile = document.getElementById('produto-file');
-            if (prodFile) {
-                prodFile.addEventListener('change', () => {
-                    converterParaBase64('produto-file', (base64) => {
-                        if (base64) {
-                            imagemProdutoBase64 = base64;
-                            document.getElementById('preview-prod-img').src = base64;
-                            document.getElementById('preview-prod-container').style.display = 'block';
-                        }
+            for(let i=1; i<=3; i++) {
+                const prodFile = document.getElementById(`produto-file-${i}`);
+                if(prodFile) {
+                    prodFile.addEventListener('change', () => {
+                        converterParaBase64(`produto-file-${i}`, i-1, (base64, idx) => {
+                            if (base64) {
+                                imagensProdutoBase64[idx] = base64;
+                                document.getElementById(`preview-prod-img-${idx+1}`).src = base64;
+                                document.getElementById('preview-prod-container').style.display = 'block';
+                            }
+                        });
                     });
-                });
+                }
             }
 
             document.getElementById('form-loja').addEventListener('submit', async function(e) {
@@ -1405,14 +1622,23 @@
             document.getElementById('form-produto').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const idEditando = document.getElementById('produto-id').value;
+
+                let listaImagensValidas = imagensProdutoBase64.filter(img => img && img !== "");
+                if(listaImagensValidas.length === 0) {
+                    alert('Por favor, adicione pelo menos uma imagem do produto.');
+                    return;
+                }
+
                 const dadosProduto = {
                     nome: document.getElementById('nome').value,
                     preco: document.getElementById('preco').value,
                     tipoDesconto: document.getElementById('tipo-desconto').value,
                     valorDesconto: document.getElementById('valor-desconto').value,
                     categoria: document.getElementById('categoria').value,
+                    marca: document.getElementById('marca-produto').value,
                     descontoPix: document.getElementById('desconto-pix').value,
-                    imagem: imagemProdutoBase64,
+                    imagem: listaImagensValidas[0], 
+                    imagens: listaImagensValidas,   
                     ajusteImagem: document.getElementById('img-fit').value,
                     descricao: document.getElementById('descricao').value,
                     tipo: 'encomenda'
@@ -1428,6 +1654,7 @@
 
                 this.reset();
                 document.getElementById('produto-id').value = '';
+                imagensProdutoBase64 = ["", "", ""];
                 document.getElementById('btn-salvar-produto').innerText = 'Salvar Produto no Catálogo';
                 document.getElementById('preview-prod-container').style.display = 'none';
                 carregarGerenciador();
@@ -1460,14 +1687,18 @@
                 <div id="carrossel-track" class="carrossel-track"></div>
             </div>
 
-            <div class="busca-container">
+            <div class="filtros-busca-box">
                 <input type="text" id="input-busca" class="input-busca" placeholder="🔍 Buscar perfume por nome..." oninput="filtrarProdutos()">
+                <select id="select-filtro-marca" class="select-marca" onchange="filtrarPorMarca()">
+                    <option value="todas">Todas as Marcas</option>
+                </select>
             </div>
 
             <div class="categorias-catalogo">
                 <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
                 <button class="cat-btn" onclick="filtrarCategoria('masculino', this)">Masculino</button>
                 <button class="cat-btn" onclick="filtrarCategoria('feminino', this)">Feminino</button>
+                <button class="cat-btn" onclick="filtrarCategoria('unissex', this)">Unissex</button>
                 <button class="cat-btn" onclick="filtrarCategoria('kids', this)">Kids</button>
             </div>
 
@@ -1523,6 +1754,18 @@
                     </form>
                 </div>
 
+                <!-- GERENCIAMENTO DE MARCAS -->
+                <div class="form-card">
+                    <h2>🏷️ Gerenciamento de Marcas</h2>
+                    <form onsubmit="salvarMarca(event)">
+                        <div class="form-group" style="display: flex; gap: 10px;">
+                            <input type="text" id="nova-marca-input" placeholder="Nome da Marca (Ex: Lattafa, Armaf...)" required>
+                            <button type="submit" class="btn-submit" style="margin-top:0; width: 140px;">Adicionar</button>
+                        </div>
+                    </form>
+                    <div id="lista-marcas-gerenciador" style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;"></div>
+                </div>
+
                 <div class="form-card">
                     <h2>📦 Gerenciamento de Produtos</h2>
                     <form id="form-produto">
@@ -1553,31 +1796,56 @@
                                 <select id="categoria">
                                     <option value="masculino">Masculino</option>
                                     <option value="feminino">Feminino</option>
+                                    <option value="unissex">Unissex</option>
                                     <option value="kids">Kids</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Desconto no PIX (%):</label>
-                                <input type="number" id="desconto-pix" placeholder="Ex: 10" min="0" max="100">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Foto do Produto:</label>
-                                <input type="file" id="produto-file" accept="image/*">
-                            </div>
-                            <div class="form-group">
-                                <label>Ajuste da Imagem:</label>
-                                <select id="img-fit">
-                                    <option value="contain">Inteira</option>
-                                    <option value="cover">Preencher</option>
+                                <label>Marca:</label>
+                                <select id="marca-produto">
+                                    <option value="">Sem Marca</option>
                                 </select>
                             </div>
                         </div>
-                        <div id="preview-prod-container" class="preview-container">
-                            <div class="preview-box-img"><img id="preview-prod-img" alt="Preview"></div>
-                        </div>
                         <div class="form-group">
+                            <label>Desconto no PIX (%):</label>
+                            <input type="number" id="desconto-pix" placeholder="Ex: 10" min="0" max="100">
+                        </div>
+
+                        <!-- Até 3 Imagens do Produto -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Foto 1 (Principal):</label>
+                                <input type="file" id="produto-file-1" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label>Foto 2 (Opcional):</label>
+                                <input type="file" id="produto-file-2" accept="image/*">
+                            </div>
+                            <div class="form-group">
+                                <label>Foto 3 (Opcional):</label>
+                                <input type="file" id="produto-file-3" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Ajuste das Imagens:</label>
+                            <select id="img-fit">
+                                <option value="contain">Inteira</option>
+                                <option value="cover">Preencher</option>
+                            </select>
+                        </div>
+
+                        <div id="preview-prod-container" class="preview-container">
+                            <p style="font-size:12px; color:var(--primary); margin-bottom:8px;">Prévia das imagens enviadas:</p>
+                            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                                <div class="preview-box-img"><img id="preview-prod-img-1" alt="Preview 1"></div>
+                                <div class="preview-box-img"><img id="preview-prod-img-2" alt="Preview 2"></div>
+                                <div class="preview-box-img"><img id="preview-prod-img-3" alt="Preview 3"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px;">
                             <label>Descrição:</label>
                             <textarea id="descricao" rows="3" required placeholder="Ex: Perfume importado..."></textarea>
                         </div>
@@ -1626,7 +1894,6 @@
             </div>
             <div id="itens-carrinho-modal"></div>
             
-            <!-- Totais separados -->
             <div id="carrinho-total-normal" class="carrinho-total">Total Normal: R$ 0,00</div>
             <div id="carrinho-total-pix" class="carrinho-total-pix">Total PIX: R$ 0,00</div>
             
@@ -1645,7 +1912,7 @@
                     <label>Seu Nome:</label>
                     <input type="text" id="checkout-nome" required placeholder="Ex: João da Silva">
                 </div>
-                <div class="form-group">
+                <div class="app-group form-group">
                     <label>Seu WhatsApp:</label>
                     <input type="text" id="checkout-telefone" required placeholder="Ex: (21) 99999-9999">
                 </div>
