@@ -7,19 +7,20 @@
     <style>
         :root {
             --primary: #d4af37;        /* Dourado Luxo */
-            --primary-dark: #aa8c2c;   /* Dourado Escuro */
-            --primary-light: rgba(212, 175, 55, 0.15);
+            --primary-dark: #b8972b;   /* Dourado Escuro */
+            --primary-light: rgba(212, 175, 55, 0.12);
             --whatsapp: #25d366;
-            --whatsapp-dark: #128c7e;
+            --whatsapp-dark: #1da851;
             --pix-color: #2ecc71;      /* Verde Pix */
-            --dark-bg: #0d0d0d;        /* Fundo Ultra Escuro */
-            --card-bg: #161616;        /* Fundo dos Cards */
-            --card-border: #262626;    /* Borda sutil */
-            --text-main: #f5f5f5;      /* Texto Principal Claro */
-            --text-muted: #999999;     /* Texto Secundário */
-            --danger: #e74c3c;         /* Vermelho Desconto */
+            --dark-bg: #0a0a0a;        /* Fundo Ultra Escuro */
+            --card-bg: #141414;        /* Fundo dos Cards */
+            --card-border: #222222;    /* Borda sutil */
+            --text-main: #f8f8f8;      /* Texto Principal Claro */
+            --text-muted: #888888;     /* Texto Secundário */
+            --danger: #e74c3c;         /* Vermelho Desconto/Exclusão */
             --warning: #f39c12;        /* Amarelo Edição */
-            --radius-standard: 14px;
+            --radius-standard: 12px;
+            --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -32,21 +33,22 @@
         body {
             background-color: var(--dark-bg);
             color: var(--text-main);
-            padding: 30px 15px;
-            line-height: 1.6;
+            padding: 25px 15px;
+            line-height: 1.5;
             padding-bottom: 90px;
+            -webkit-font-smoothing: antialiased;
         }
 
         header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
         header h1 {
             color: var(--primary);
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             display: inline-block;
             position: relative;
@@ -59,7 +61,7 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
+            width: 50px;
             height: 2px;
             background-color: var(--primary);
         }
@@ -72,17 +74,17 @@
         /* Perfil da Loja */
         .loja-header {
             background: var(--card-bg);
-            border: 1px solid var(--primary);
+            border: 1px solid var(--card-border);
             border-radius: var(--radius-standard);
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.08);
-            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 35px;
             text-align: center;
         }
 
         .loja-capa-box {
             width: 100%;
-            height: 220px;
+            height: 200px;
             background: #000;
             display: flex;
             align-items: center;
@@ -91,27 +93,31 @@
             border-bottom: 1px solid var(--card-border);
         }
 
+        @media (min-width: 768px) {
+            .loja-capa-box { height: 260px; }
+        }
+
         .loja-capa {
             width: 100%;
             height: 100%;
         }
 
         .loja-info-box {
-            padding: 30px 20px;
+            padding: 25px 20px;
         }
 
         .loja-nome {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 10px;
-            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
         }
 
         .loja-desc {
-            font-size: 15px;
+            font-size: 14px;
             color: var(--text-muted);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             max-width: 650px;
             margin-left: auto;
             margin-right: auto;
@@ -131,13 +137,13 @@
             gap: 8px;
             background: var(--whatsapp);
             color: white;
-            padding: 10px 20px;
+            padding: 9px 18px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+            font-size: 13px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.15);
         }
 
         .btn-vendedor-topo:hover {
@@ -149,15 +155,15 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #25d366;
+            background: #ffffff;
             color: #000;
-            padding: 10px 20px;
+            padding: 9px 18px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+            font-size: 13px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
         }
 
         .btn-grupo-topo:hover {
@@ -167,35 +173,35 @@
 
         /* Carrossel de Destaques */
         .carrossel-container {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-standard);
-            padding: 20px;
+            padding: 18px;
             overflow: hidden;
         }
 
         .carrossel-titulo {
             color: var(--primary);
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             letter-spacing: 1px;
         }
 
         .carrossel-track {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             overflow-x: auto;
             scroll-behavior: smooth;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             scrollbar-width: thin;
             scrollbar-color: var(--primary) var(--card-border);
         }
 
         .carrossel-track::-webkit-scrollbar {
-            height: 6px;
+            height: 5px;
         }
 
         .carrossel-track::-webkit-scrollbar-thumb {
@@ -204,29 +210,30 @@
         }
 
         .carrossel-item {
-            min-width: 140px;
-            max-width: 140px;
+            min-width: 130px;
+            max-width: 130px;
             background: var(--dark-bg);
             border: 1px solid var(--card-border);
             border-radius: 10px;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             flex-shrink: 0;
             cursor: pointer;
-            transition: border-color 0.3s;
+            transition: var(--transition-smooth);
         }
 
         .carrossel-item:hover {
             border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .carrossel-img-box {
             width: 100%;
-            height: 110px;
+            height: 100px;
             background: #000;
-            border-radius: 8px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -238,17 +245,17 @@
         }
 
         .carrossel-nome {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-main);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .carrossel-preco {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--primary);
         }
@@ -257,34 +264,22 @@
         .filtros-busca-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             flex-wrap: wrap;
         }
 
-        .input-busca {
-            flex: 2;
-            min-width: 220px;
-            padding: 14px 18px;
+        .input-busca, .select-marca {
+            padding: 12px 16px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: var(--radius-standard);
             color: var(--text-main);
-            font-size: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 14px;
+            transition: var(--transition-smooth);
         }
 
-        .select-marca {
-            flex: 1;
-            min-width: 160px;
-            padding: 14px 18px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-standard);
-            color: var(--text-main);
-            font-size: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            cursor: pointer;
-        }
+        .input-busca { flex: 2; min-width: 200px; }
+        .select-marca { flex: 1; min-width: 150px; cursor: pointer; }
 
         .input-busca:focus, .select-marca:focus {
             border-color: var(--primary);
@@ -296,13 +291,13 @@
         .categorias-catalogo {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
         .cat-btn {
-            padding: 8px 18px;
+            padding: 7px 16px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             color: var(--text-muted);
@@ -310,7 +305,7 @@
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition-smooth);
         }
 
         .cat-btn:hover {
@@ -328,20 +323,20 @@
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 35px;
+            gap: 10px;
+            margin-bottom: 30px;
         }
 
         .tab-btn {
-            padding: 11px 24px;
+            padding: 10px 22px;
             border: 1px solid var(--card-border);
             background: var(--card-bg);
             color: var(--text-muted);
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             border-radius: 8px;
-            transition: all 0.3s ease;
+            transition: var(--transition-smooth);
         }
 
         .tab-btn:hover {
@@ -353,24 +348,24 @@
             background: var(--primary);
             color: #000;
             border-color: var(--primary);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
         }
 
         .section { display: none; }
-        .section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+        .section.active { display: block; animation: fadeIn 0.3s ease forwards; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         #tela-login {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            padding: 35px;
+            padding: 30px;
             border-radius: var(--radius-standard);
-            max-width: 420px;
-            margin: 50px auto;
+            max-width: 400px;
+            margin: 40px auto;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-align: center;
         }
@@ -378,31 +373,31 @@
         .form-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            padding: 30px;
+            padding: 25px;
             border-radius: var(--radius-standard);
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             max-width: 650px;
-            margin: 0 auto 30px auto;
+            margin: 0 auto 25px auto;
         }
 
         .form-card h2 {
             color: var(--primary);
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 18px;
+            margin-bottom: 18px;
             font-weight: 600;
             border-bottom: 1px solid var(--card-border);
             padding-bottom: 10px;
         }
 
-        .form-group { margin-bottom: 18px; }
-        .form-row { display: flex; gap: 15px; }
+        .form-group { margin-bottom: 16px; }
+        .form-row { display: flex; gap: 12px; }
         .form-row .form-group { flex: 1; }
 
         label {
             display: block;
             margin-bottom: 6px;
             font-weight: 500;
-            font-size: 13px;
+            font-size: 11px;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -410,13 +405,13 @@
 
         input, textarea, select {
             width: 100%;
-            padding: 12px 14px;
+            padding: 11px 14px;
             border: 1px solid var(--card-border);
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             background: var(--dark-bg);
             color: var(--text-main);
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: var(--transition-smooth);
         }
 
         input:focus, textarea:focus, select:focus {
@@ -425,28 +420,28 @@
             box-shadow: 0 0 0 3px var(--primary-light);
         }
 
-        input[type="file"] { padding: 8px; background: #111; cursor: pointer; font-size: 13px; }
+        input[type="file"] { padding: 7px; background: #111; cursor: pointer; font-size: 12px; }
 
         button.btn-submit, button.btn-login {
             background: var(--primary);
             color: #000;
             border: none;
-            padding: 14px;
+            padding: 13px;
             width: 100%;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition-smooth);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         button.btn-submit:hover, button.btn-login:hover {
             background: var(--primary-dark);
             color: #fff;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
         }
 
         /* Grid de Produtos */
@@ -457,7 +452,7 @@
         }
 
         @media (min-width: 768px) {
-            .catalogo-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+            .catalogo-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
         }
 
         .produto-card {
@@ -465,18 +460,18 @@
             border: 1px solid var(--card-border);
             border-radius: var(--radius-standard);
             overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.3s ease;
+            transition: var(--transition-smooth);
             position: relative;
         }
 
         .produto-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
         .tag-encomenda {
@@ -485,16 +480,14 @@
             left: 8px;
             background: var(--warning);
             color: #000;
-            padding: 3px 7px;
-            border-radius: 6px;
+            padding: 3px 6px;
+            border-radius: 5px;
             font-size: 9px;
             font-weight: 700;
             z-index: 2;
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
-
-        @media (min-width: 768px) { .tag-encomenda { top: 12px; left: 12px; padding: 5px 10px; font-size: 11px; } }
 
         .tag-esgotado {
             background: var(--danger) !important;
@@ -507,8 +500,8 @@
             right: 8px;
             background: var(--danger);
             color: white;
-            padding: 3px 7px;
-            border-radius: 6px;
+            padding: 3px 6px;
+            border-radius: 5px;
             font-size: 9px;
             font-weight: 700;
             z-index: 2;
@@ -516,11 +509,9 @@
             text-transform: uppercase;
         }
 
-        @media (min-width: 768px) { .tag-desconto { top: 12px; right: 12px; padding: 5px 10px; font-size: 11px; } }
-
         .produto-img-box {
             width: 100%;
-            height: 150px;
+            height: 140px;
             background: #111;
             display: flex;
             align-items: center;
@@ -528,96 +519,55 @@
             overflow: hidden;
             border-bottom: 1px solid var(--card-border);
             position: relative;
+            cursor: pointer;
         }
 
-        @media (min-width: 768px) { .produto-img-box { height: 230px; } }
+        @media (min-width: 768px) { .produto-img-box { height: 210px; } }
 
         .produto-img {
             width: 100%;
             height: 100%;
-            transition: transform 0.5s ease;
-            cursor: pointer;
+            transition: transform 0.4s ease;
         }
 
-        .produto-card:hover .produto-img { transform: scale(1.05); }
-
-        /* Controles do Carrossel de Imagens no Card */
-        .card-img-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            z-index: 3;
-            transition: background 0.2s;
-        }
-        .card-img-btn:hover { background: var(--primary); color: #000; }
-        .card-img-prev { left: 8px; }
-        .card-img-next { right: 8px; }
-
-        .card-img-dots {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 4px;
-            z-index: 3;
-        }
-        .card-img-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.4);
-        }
-        .card-img-dot.active {
-            background: var(--primary);
-            width: 14px;
-            border-radius: 3px;
-        }
+        .produto-card:hover .produto-img { transform: scale(1.03); }
 
         .produto-info {
             padding: 12px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding-bottom: 115px;
+            padding-bottom: 85px;
         }
 
-        @media (min-width: 768px) { .produto-info { padding: 20px; padding-bottom: 125px; } }
+        @media (min-width: 768px) { .produto-info { padding: 16px; padding-bottom: 90px; } }
 
         .produto-marca {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .produto-nome {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             line-height: 1.3;
+            cursor: pointer;
+            transition: var(--transition-smooth);
         }
+        .produto-nome:hover { color: var(--primary); }
 
-        @media (min-width: 768px) { .produto-nome { font-size: 18px; margin-bottom: 8px; } }
+        @media (min-width: 768px) { .produto-nome { font-size: 16px; margin-bottom: 6px; } }
 
         .produto-desc {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             line-height: 1.4;
             flex-grow: 1;
             overflow: hidden;
@@ -626,28 +576,12 @@
             -webkit-box-orient: vertical;
         }
 
-        @media (min-width: 768px) { .produto-desc { font-size: 13px; line-height: 1.5; } }
-        .produto-desc.expandido { display: block; -webkit-line-clamp: unset; }
-
-        .btn-ver-mais {
-            background: transparent;
-            border: none;
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 0;
-            margin-bottom: 10px;
-            display: inline-block;
-            text-align: left;
-        }
-
-        .btn-ver-mais:hover { text-decoration: underline; }
+        @media (min-width: 768px) { .produto-desc { font-size: 12px; } }
 
         .preco-box {
             margin-top: auto;
-            padding-top: 5px;
-            margin-bottom: 5px;
+            padding-top: 4px;
+            margin-bottom: 4px;
         }
 
         .preco-antigo {
@@ -657,24 +591,23 @@
             margin-right: 6px;
             display: inline-block;
         }
-        @media (min-width: 768px) { .preco-antigo { font-size: 13px; margin-right: 8px; } }
 
         .produto-preco {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-main);
             display: inline-block;
         }
-        @media (min-width: 768px) { .produto-preco { font-size: 18px; } }
+        @media (min-width: 768px) { .produto-preco { font-size: 17px; } }
 
         .preco-pix {
-            font-size: 14px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 700;
             color: var(--pix-color);
-            margin-top: 3px;
+            margin-top: 2px;
             display: block;
         }
-        @media (min-width: 768px) { .preco-pix { font-size: 16px; } }
+        @media (min-width: 768px) { .preco-pix { font-size: 15px; } }
 
         /* Rodapé fixo do card */
         .produto-acoes-footer {
@@ -687,10 +620,9 @@
             padding: 8px 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             z-index: 5;
         }
-        @media (min-width: 768px) { .produto-acoes-footer { padding: 12px 15px; gap: 10px; } }
 
         .card-qtd-controle {
             display: flex;
@@ -698,16 +630,12 @@
             justify-content: space-between;
             background: var(--dark-bg);
             border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 2px 8px;
+            border-radius: 6px;
+            padding: 2px 6px;
         }
-        @media (min-width: 768px) { .card-qtd-controle { padding: 4px 10px; } }
 
-        .card-qtd-btn { background: transparent; border: none; color: var(--primary); font-size: 16px; font-weight: 700; cursor: pointer; padding: 2px 8px; }
-        @media (min-width: 768px) { .card-qtd-btn { font-size: 18px; padding: 2px 12px; } }
-
-        .card-qtd-numero { font-weight: 700; font-size: 13px; color: var(--text-main); }
-        @media (min-width: 768px) { .card-qtd-numero { font-size: 15px; } }
+        .card-qtd-btn { background: transparent; border: none; color: var(--primary); font-size: 15px; font-weight: 700; cursor: pointer; padding: 2px 6px; }
+        .card-qtd-numero { font-weight: 700; font-size: 12px; color: var(--text-main); }
 
         .btn-add-carrinho {
             display: flex;
@@ -718,15 +646,14 @@
             color: #000;
             border: none;
             width: 100%;
-            padding: 8px;
+            padding: 7px;
             font-weight: 700;
             font-size: 11px;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.3s ease;
+            border-radius: 6px;
+            transition: var(--transition-smooth);
             text-transform: uppercase;
         }
-        @media (min-width: 768px) { .btn-add-carrinho { padding: 10px; font-size: 13px; gap: 8px; } }
 
         .btn-add-carrinho:hover { background: var(--primary-dark); color: #fff; }
 
@@ -735,10 +662,7 @@
             color: var(--text-muted);
             cursor: not-allowed;
         }
-        .btn-esgotado:hover {
-            background: var(--card-border);
-            color: var(--text-muted);
-        }
+        .btn-esgotado:hover { background: var(--card-border); color: var(--text-muted); }
 
         /* Barra Flutuante do Carrinho */
         .carrinho-flutuante {
@@ -747,21 +671,21 @@
             right: 20px;
             background: var(--primary);
             color: #000;
-            padding: 14px 22px;
+            padding: 12px 20px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 15px;
-            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 999;
-            transition: transform 0.2s;
+            transition: var(--transition-smooth);
         }
-        .carrinho-flutuante:hover { transform: scale(1.05); }
+        .carrinho-flutuante:hover { transform: scale(1.03); background: var(--primary-dark); color: #fff; }
 
-        .badge-qtd { background: #000; color: var(--primary); padding: 2px 8px; border-radius: 50%; font-size: 13px; }
+        .badge-qtd { background: #000; color: var(--primary); padding: 2px 7px; border-radius: 50%; font-size: 12px; }
 
         /* Modais Gerais */
         .modal-overlay {
@@ -770,7 +694,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(3px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -781,11 +706,11 @@
 
         .modal-content {
             background: var(--card-bg);
-            border: 1px solid var(--primary);
+            border: 1px solid var(--card-border);
             width: 100%;
-            max-width: 550px;
+            max-width: 500px;
             border-radius: var(--radius-standard);
-            padding: 30px;
+            padding: 25px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 15px 40px rgba(0,0,0,0.7);
@@ -795,35 +720,36 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             border-bottom: 1px solid var(--card-border);
             padding-bottom: 10px;
         }
 
-        .modal-header h3 { color: var(--primary); font-size: 20px; }
+        .modal-header h3 { color: var(--primary); font-size: 18px; }
 
-        .btn-fechar-modal { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        .btn-fechar-modal { background: transparent; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; transition: var(--transition-smooth); }
         .btn-fechar-modal:hover { color: var(--text-main); }
 
-        /* Modal Ampliar Imagem */
-        .modal-imagem-content {
+        /* Modal Detalhes do Produto */
+        .modal-detalhes-conteudo {
             background: var(--card-bg);
-            border: 1px solid var(--primary);
+            border: 1px solid var(--card-border);
             width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
+            max-width: 520px;
+            max-height: 95vh;
             border-radius: var(--radius-standard);
-            padding: 20px;
+            padding: 22px;
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            overflow-y: auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
         }
-        
-        .modal-img-container {
+
+        /* Foto principal maior nos detalhes (340px) com dica de zoom */
+        .modal-galeria-box {
             width: 100%;
-            height: 350px;
+            height: 340px;
             background: #000;
             border-radius: 8px;
             display: flex;
@@ -831,50 +757,107 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
+            margin-bottom: 12px;
+            border: 1px solid var(--card-border);
+            cursor: zoom-in;
+        }
+        .modal-galeria-box::after {
+            content: '🔍 Clique para ampliar';
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0,0,0,0.7);
+            color: var(--primary);
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            pointer-events: none;
+            border: 1px solid var(--card-border);
         }
 
-        .modal-imagem-content img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        
-        .btn-fechar-img-modal {
-            position: absolute; top: 15px; right: 15px; background: var(--dark-bg); border: 1px solid var(--card-border);
-            color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10;
+        .modal-galeria-img {
+            max-width: 100%;
+            max-height: 100%;
+            transition: transform 0.3s ease;
         }
-        .btn-fechar-img-modal:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+        /* Modal Zoom Tela Cheia */
+        #modal-zoom-foto {
+            z-index: 2000;
+            background: rgba(0,0,0,0.92);
+        }
+        .zoom-conteudo {
+            position: relative;
+            max-width: 95vw;
+            max-height: 95vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zoom-conteudo img {
+            max-width: 95vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+
+        .modal-minhas-fotos {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+
+        .miniatura-foto {
+            width: 50px;
+            height: 50px;
+            background: #111;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-smooth);
+        }
+        .miniatura-foto.active { border-color: var(--primary); }
+        .miniatura-foto img { width: 100%; height: 100%; object-fit: contain; }
 
         .item-carrinho-lista {
-            display: flex; justify-content: space-between; align-items: center; padding: 12px 0;
-            border-bottom: 1px solid var(--card-border); font-size: 14px;
+            display: flex; justify-content: space-between; align-items: center; padding: 10px 0;
+            border-bottom: 1px solid var(--card-border); font-size: 13px;
         }
 
-        .controle-qtd-box { display: flex; align-items: center; gap: 8px; background: var(--dark-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 2px 6px; }
-        .btn-qtd { background: transparent; border: none; color: var(--primary); font-size: 16px; font-weight: 700; cursor: pointer; padding: 2px 6px; }
+        .controle-qtd-box { display: flex; align-items: center; gap: 6px; background: var(--dark-bg); border: 1px solid var(--card-border); border-radius: 6px; padding: 2px 6px; }
+        .btn-qtd { background: transparent; border: none; color: var(--primary); font-size: 15px; font-weight: 700; cursor: pointer; padding: 2px 6px; }
         .btn-qtd:hover { color: #fff; }
 
-        .carrinho-total { font-size: 16px; font-weight: 700; color: var(--text-main); text-align: right; margin: 20px 0 10px 0; }
-        .carrinho-total-pix { font-size: 18px; font-weight: 800; color: var(--pix-color); text-align: right; margin-bottom: 20px; }
+        .carrinho-total { font-size: 15px; font-weight: 700; color: var(--text-main); text-align: right; margin: 16px 0 8px 0; }
+        .carrinho-total-pix { font-size: 17px; font-weight: 800; color: var(--pix-color); text-align: right; margin-bottom: 16px; }
 
         /* Gestor itens */
         .item-gerenciador {
-            background: var(--card-bg); border: 1px solid var(--card-border); padding: 14px 18px;
-            border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; color: #fff;
+            background: var(--card-bg); border: 1px solid var(--card-border); padding: 12px 16px;
+            border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px; color: #fff;
         }
-        .acoes-gestor { display: flex; gap: 8px; align-items: center; }
-        .btn-editar { background: var(--warning); color: #000; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
-        .btn-excluir { background: var(--danger); color: white; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
-        .btn-status-toggle { background: var(--card-border); color: #fff; border: 1px solid var(--primary); padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .acoes-gestor { display: flex; gap: 6px; align-items: center; }
+        .btn-editar { background: var(--warning); color: #000; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 700; }
+        .btn-excluir { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 700; }
+        .btn-status-toggle { background: var(--card-border); color: #fff; border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .btn-status-toggle:hover { border-color: var(--primary); }
         
-        .sem-produtos { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-standard); }
+        .sem-produtos { text-align: center; grid-column: 1 / -1; padding: 50px 20px; color: var(--text-muted); font-size: 15px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-standard); }
 
-        .preview-container { margin-top: 12px; background: var(--dark-bg); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; text-align: center; display: none; }
+        .preview-container { margin-top: 10px; background: var(--dark-bg); border: 1px dashed var(--card-border); padding: 10px; border-radius: 8px; text-align: center; display: none; }
         .preview-box-img, .preview-box-capa { background: #000; margin: 0 auto; border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 6px; position: relative; }
-        .preview-box-img { width: 130px; height: 130px; }
-        .preview-box-capa { width: 100%; height: 110px; }
+        .preview-box-img { width: 110px; height: 110px; }
+        .preview-box-capa { width: 100%; height: 100px; }
         .preview-box-img img, .preview-box-capa img { width: 100%; height: 100%; }
 
-        .lista-vendedores-gerenciador { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .vendedor-item-box { display: flex; gap: 10px; align-items: center; }
+        .lista-vendedores-gerenciador { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+        .vendedor-item-box { display: flex; gap: 8px; align-items: center; }
     </style>
 
     <!-- Script do Firebase -->
@@ -899,7 +882,9 @@
         let produtosGlobais = {}; 
         let quantidadesCards = {}; 
         let cardIndicesImagens = {}; 
-        let modalZoomAtualId = null;
+        let modalDetalhesAtualId = null;
+        let indiceFotoModalDetalhes = 0;
+        let qtdModalDetalhes = 1;
         let dadosLojaGlobal = null;
         let imagemCapaBase64 = "";
         let imagensProdutoBase64 = ["", "", ""];
@@ -922,7 +907,6 @@
             document.getElementById(`produto-file-${index + 1}`).value = "";
             document.getElementById(`preview-prod-img-${index + 1}`).src = "";
             
-            // Se todas estiverem vazias, esconde a caixa de prévia geral
             const temAlguma = imagensProdutoBase64.some(img => img !== "");
             if(!temAlguma) {
                 document.getElementById('preview-prod-container').style.display = 'none';
@@ -1105,30 +1089,13 @@
                     if (disponivel) {
                         const carItem = document.createElement('div');
                         carItem.className = 'carrossel-item';
-                        carItem.onclick = () => {
-                            const el = document.querySelector(`[data-id="${id}"]`);
-                            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        };
+                        carItem.onclick = () => abrirDetalhesProduto(id);
                         carItem.innerHTML = `
                             <div class="carrossel-img-box"><img src="${imgInicial}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};"></div>
                             <div class="carrossel-nome">${prod.nome}</div>
                             <div class="carrossel-preco" style="color: ${descPix > 0 ? 'var(--pix-color)' : 'var(--primary)'}">R$ ${descPix > 0 ? subtotalPixStr : calc.precoFinal}</div>
                         `;
                         carrosselTrack.appendChild(carItem);
-                    }
-
-                    let dotsHtml = '';
-                    let arrowsHtml = '';
-                    if (listaImagens.length > 1) {
-                        arrowsHtml = `
-                            <button class="card-img-btn card-img-prev" onclick="mudarFotoCard('${id}', -1, event)">&#10094;</button>
-                            <button class="card-img-btn card-img-next" onclick="mudarFotoCard('${id}', 1, event)">&#10095;</button>
-                        `;
-                        dotsHtml = `<div class="card-img-dots" id="dots-${id}">`;
-                        for(let i=0; i<listaImagens.length; i++) {
-                            dotsHtml += `<div class="card-img-dot ${i === 0 ? 'active' : ''}"></div>`;
-                        }
-                        dotsHtml += `</div>`;
                     }
 
                     const card = document.createElement('div');
@@ -1141,16 +1108,13 @@
                     card.innerHTML = `
                         ${disponivel ? '<div class="tag-encomenda">📦 Sob Encomenda</div>' : '<div class="tag-encomenda tag-esgotado">❌ Esgotado</div>'}
                         ${calc.temDesconto && disponivel ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
-                        <div class="produto-img-box" onclick="ampliarImagemAtual('${id}')">
-                            ${arrowsHtml}
+                        <div class="produto-img-box" onclick="abrirDetalhesProduto('${id}')">
                             <img src="${imgInicial}" alt="${prod.nome}" class="produto-img" id="img-card-${id}" style="object-fit: ${prod.ajusteImagem || 'contain'};">
-                            ${dotsHtml}
                         </div>
                         <div class="produto-info">
                             ${prod.marca ? `<div class="produto-marca">${prod.marca}</div>` : ''}
-                            <div class="produto-nome">${prod.nome}</div>
-                            <div class="produto-desc" id="desc-${id}">${prod.descricao || ''}</div>
-                            ${prod.descricao && prod.descricao.length > 50 ? `<button class="btn-ver-mais" onclick="alternarDescricao('${id}')" id="btn-desc-${id}">Ver mais</button>` : ''}
+                            <div class="produto-nome" onclick="abrirDetalhesProduto('${id}')">${prod.nome}</div>
+                            <div class="produto-desc">${prod.descricao || ''}</div>
                             <div class="preco-box">
                                 ${calc.temDesconto && disponivel ? `<span class="preco-antigo">R$ ${prod.preco}</span>` : ''}
                                 <div class="produto-preco" id="preco-total-card-${id}">R$ ${subtotalCardStr}</div>
@@ -1166,7 +1130,7 @@
                                 </div>
                                 <button class="btn-add-carrinho" onclick="adicionarComQtdCard('${id}')">🛒 Adicionar</button>
                             ` : `
-                                <button class="btn-add-carrinho btn-esgotado" disabled>Indisponível no Momento</button>
+                                <button class="btn-add-carrinho btn-esgotado" disabled>Indisponível</button>
                             `}
                         </div>
                     `;
@@ -1180,98 +1144,134 @@
             }
         }
 
-        window.mudarFotoCard = function(id, direcao, event) {
-            if(event) event.stopPropagation();
+        /* Funções da Nova Tela de Detalhes Completa (Modal) */
+        window.abrirDetalhesProduto = function(id) {
             const prod = produtosGlobais[id];
-            if (!prod || !prod.listaImagens || prod.listaImagens.length <= 1) return;
+            if (!prod) return;
 
-            let idx = cardIndicesImagens[id] || 0;
-            idx += direcao;
-            if (idx < 0) idx = prod.listaImagens.length - 1;
-            if (idx >= prod.listaImagens.length) idx = 0;
-            cardIndicesImagens[id] = idx;
+            modalDetalhesAtualId = id;
+            indiceFotoModalDetalhes = 0;
+            qtdModalDetalhes = quantidadesCards[id] || 1;
 
-            document.getElementById(`img-card-${id}`).src = prod.listaImagens[idx];
-
-            const dotsContainer = document.getElementById(`dots-${id}`);
-            if(dotsContainer) {
-                const dots = dotsContainer.children;
-                for(let i=0; i<dots.length; i++) {
-                    dots[i].className = `card-img-dot ${i === idx ? 'active' : ''}`;
-                }
-            }
+            atualizarConteudoModalDetalhes();
+            document.getElementById('modal-detalhes-produto').style.display = 'flex';
         }
 
-        window.ampliarImagemAtual = function(id) {
-            const prod = produtosGlobais[id];
-            if(!prod) return;
-            modalZoomAtualId = id;
-            let idx = cardIndicesImagens[id] || 0;
-            atualizarModalZoomUI(idx);
-            document.getElementById('modal-ampliar-imagem').style.display = 'flex';
+        window.fecharDetalhesProduto = function() {
+            document.getElementById('modal-detalhes-produto').style.display = 'none';
+            modalDetalhesAtualId = null;
         }
 
-        window.mudarFotoModalZoom = function(direcao) {
-            if(!modalZoomAtualId) return;
-            const prod = produtosGlobais[modalZoomAtualId];
-            if(!prod || !prod.listaImagens || prod.listaImagens.length <= 1) return;
-
-            let idx = cardIndicesImagens[modalZoomAtualId] || 0;
-            idx += direcao;
-            if (idx < 0) idx = prod.listaImagens.length - 1;
-            if (idx >= prod.listaImagens.length) idx = 0;
-            cardIndicesImagens[modalZoomAtualId] = idx;
-
-            document.getElementById(`img-card-${modalZoomAtualId}`).src = prod.listaImagens[idx];
-            const dotsContainer = document.getElementById(`dots-${modalZoomAtualId}`);
-            if(dotsContainer) {
-                const dots = dotsContainer.children;
-                for(let i=0; i<dots.length; i++) {
-                    dots[i].className = `card-img-dot ${i === idx ? 'active' : ''}`;
-                }
-            }
-
-            atualizarModalZoomUI(idx);
+        window.mudarFotoModalDetalhes = function(index) {
+            indiceFotoModalDetalhes = index;
+            atualizarConteudoModalDetalhes();
         }
 
-        function atualizarModalZoomUI(idx) {
-            const prod = produtosGlobais[modalZoomAtualId];
-            if(!prod) return;
+        /* Funções do Zoom / Tela Cheia */
+        window.abrirZoomFoto = function() {
+            const prod = produtosGlobais[modalDetalhesAtualId];
+            if (!prod) return;
+            const listaImgs = prod.listaImagens || [prod.imagem];
+            const fotoAtual = listaImgs[indiceFotoModalDetalhes];
+
+            document.getElementById('img-zoom-tela-cheia').src = fotoAtual;
+            document.getElementById('modal-zoom-foto').style.display = 'flex';
+        }
+
+        window.fecharZoomFoto = function() {
+            document.getElementById('modal-zoom-foto').style.display = 'none';
+        }
+
+        window.alterarQtdModalDetalhes = function(delta) {
+            qtdModalDetalhes += delta;
+            if (qtdModalDetalhes < 1) qtdModalDetalhes = 1;
+            document.getElementById('modal-qtd-num').innerText = qtdModalDetalhes;
             
-            document.getElementById('titulo-imagem-ampliada').innerText = prod.nome;
-            document.getElementById('imagem-ampliada').src = prod.listaImagens[idx] || prod.imagem;
+            const prod = produtosGlobais[modalDetalhesAtualId];
+            if (!prod) return;
+            const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
+            const subtotal = calc.valorNumerico * qtdModalDetalhes;
+            document.getElementById('modal-preco-subtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
 
-            const modalNavBox = document.getElementById('modal-zoom-nav-box');
-            if (prod.listaImagens && prod.listaImagens.length > 1) {
-                let dotsHtml = '';
-                for(let i=0; i<prod.listaImagens.length; i++) {
-                    dotsHtml += `<div class="card-img-dot ${i === idx ? 'active' : ''}"></div>`;
-                }
-                modalNavBox.innerHTML = `
-                    <button class="card-img-btn card-img-prev" style="position:static; transform:none;" onclick="mudarFotoModalZoom(-1)">&#10094;</button>
-                    <div style="display:flex; gap:6px; align-items:center;">${dotsHtml}</div>
-                    <button class="card-img-btn card-img-next" style="position:static; transform:none;" onclick="mudarFotoModalZoom(1)">&#10095;</button>
-                `;
-                modalNavBox.style.display = 'flex';
-            } else {
-                modalNavBox.style.display = 'none';
+            const descPix = parseFloat(prod.descontoPix) || 0;
+            if (descPix > 0) {
+                const pixTotal = subtotal - (subtotal * (descPix / 100));
+                document.getElementById('modal-pix-subtotal').innerText = `R$ ${pixTotal.toFixed(2).replace('.', ',')} no PIX`;
             }
         }
 
-        window.fecharModalImagem = function() { 
-            document.getElementById('modal-ampliar-imagem').style.display = 'none'; 
-            modalZoomAtualId = null;
+        window.adicionarAoCarrinhoPeloModal = function() {
+            if (!modalDetalhesAtualId) return;
+            const produto = produtosGlobais[modalDetalhesAtualId];
+            if (!produto || produto.status === 'indisponivel') return;
+
+            const calc = calcularPrecoFinal(produto.preco, produto.tipoDesconto, produto.valorDesconto);
+            const itemExistente = carrinho.find(item => item.id === modalDetalhesAtualId);
+
+            if (itemExistente) {
+                itemExistente.quantidade += qtdModalDetalhes;
+            } else {
+                carrinho.push({
+                    id: modalDetalhesAtualId,
+                    nome: produto.nome,
+                    precoNum: calc.valorNumerico,
+                    precoStr: calc.precoFinal,
+                    quantidade: qtdModalDetalhes,
+                    descontoPix: parseFloat(produto.descontoPix) || 0
+                });
+            }
+
+            atualizarCarrinhoUI();
+            fecharDetalhesProduto();
+
+            document.getElementById('texto-aviso-sucesso').innerText = `✅ ${qtdModalDetalhes}x "${produto.nome}" adicionado com sucesso!`;
+            document.getElementById('modal-aviso-sucesso').style.display = 'flex';
         }
 
-        window.alternarDescricao = function(id) {
-            const descEl = document.getElementById(`desc-${id}`);
-            const btnEl = document.getElementById(`btn-desc-${id}`);
-            if(descEl.classList.contains('expandido')) {
-                descEl.classList.remove('expandido');
-                btnEl.innerText = 'Ver mais';
+        function atualizarConteudoModalDetalhes() {
+            const prod = produtosGlobais[modalDetalhesAtualId];
+            if (!prod) return;
+
+            const listaImgs = prod.listaImagens || [prod.imagem];
+            if (indiceFotoModalDetalhes >= listaImgs.length) indiceFotoModalDetalhes = 0;
+
+            const fotoAtual = listaImgs[indiceFotoModalDetalhes];
+            const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
+            const subtotal = calc.valorNumerico * qtdModalDetalhes;
+            const descPix = parseFloat(prod.descontoPix) || 0;
+            const pixTotal = subtotal - (subtotal * (descPix / 100));
+
+            document.getElementById('modal-detalhes-titulo').innerText = prod.nome;
+            document.getElementById('modal-detalhes-marca').innerText = prod.marca ? prod.marca : '';
+            document.getElementById('modal-detalhes-img-principal').src = fotoAtual;
+            document.getElementById('modal-detalhes-img-principal').style.objectFit = prod.ajusteImagem || 'contain';
+            document.getElementById('modal-detalhes-texto-completo').innerText = prod.descricao || 'Sem descrição cadastrada.';
+            
+            document.getElementById('modal-qtd-num').innerText = qtdModalDetalhes;
+            document.getElementById('modal-preco-subtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+
+            const pixEl = document.getElementById('modal-pix-subtotal');
+            if (descPix > 0) {
+                pixEl.style.display = 'block';
+                pixEl.innerText = `R$ ${pixTotal.toFixed(2).replace('.', ',')} no PIX`;
             } else {
-                descEl.classList.add('expandido');
-                btnEl.innerText = 'Ver menos';
+                pixEl.style.display = 'none';
+            }
+
+            // Miniaturas da galeria
+            const miniaturasBox = document.getElementById('modal-detalhes-miniaturas');
+            miniaturasBox.innerHTML = '';
+            if (listaImgs.length > 1) {
+                miniaturasBox.style.display = 'flex';
+                listaImgs.forEach((imgUrl, idx) => {
+                    const mini = document.createElement('div');
+                    mini.className = `miniatura-foto ${idx === indiceFotoModalDetalhes ? 'active' : ''}`;
+                    mini.onclick = () => mudarFotoModalDetalhes(idx);
+                    mini.innerHTML = `<img src="${imgUrl}" alt="Miniatura">`;
+                    miniaturasBox.appendChild(mini);
+                });
+            } else {
+                miniaturasBox.style.display = 'none';
             }
         }
 
@@ -1413,13 +1413,13 @@
                             <strong>${item.nome}</strong><br>
                             <span style="color:var(--primary); font-weight:600;">R$ ${item.precoStr} un</span>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
                             <div class="controle-qtd-box">
                                 <button class="btn-qtd" onclick="mudarQuantidadeModal('${item.id}', -1)">-</button>
-                                <span style="font-weight:700; min-width: 20px; text-align:center;">${item.quantidade}</span>
+                                <span style="font-weight:700; min-width: 18px; text-align:center;">${item.quantidade}</span>
                                 <button class="btn-qtd" onclick="mudarQuantidadeModal('${item.id}', 1)">+</button>
                             </div>
-                            <button onclick="removerDoCarrinho('${item.id}')" style="background:var(--danger); color:#fff; border:none; padding:5px 8px; border-radius:4px; cursor:pointer; font-size:11px;">🗑️</button>
+                            <button onclick="removerDoCarrinho('${item.id}')" style="background:var(--danger); color:#fff; border:none; padding:5px 7px; border-radius:4px; cursor:pointer; font-size:11px;">🗑️</button>
                         </div>
                     `;
                     listaDiv.appendChild(divItem);
@@ -1552,7 +1552,7 @@
                     div.className = 'item-gerenciador';
                     div.style.padding = '8px 14px';
                     div.innerHTML = `
-                        <span style="font-weight:600; font-size:14px;">${mData.nome}</span>
+                        <span style="font-weight:600; font-size:13px;">${mData.nome}</span>
                         <button type="button" class="btn-excluir" onclick="deletarMarca('${mId}')">Excluir</button>
                     `;
                     listaMarcasDiv.appendChild(div);
@@ -1601,11 +1601,11 @@
                     item.setAttribute('data-status-gestor', prod.status || 'disponivel');
 
                     item.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <img src="${imgCapa}" style="width: 45px; height: 45px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/45'">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="${imgCapa}" style="width: 40px; height: 40px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/40'">
                             <div>
-                                <strong style="color: var(--text-main);">${prod.nome || 'Produto Sem Nome'}</strong><br>
-                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
+                                <strong style="color: var(--text-main); font-size: 13px;">${prod.nome || 'Produto Sem Nome'}</strong><br>
+                                <span style="font-size: 12px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
                                 <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span>
                             </div>
                         </div>
@@ -1802,7 +1802,7 @@
                     document.getElementById(`produto-file-${k}`).value = "";
                     document.getElementById(`preview-prod-img-${k}`).src = "";
                 }
-                document.getElementById('btn-salvar-produto').innerText = 'Salvar Produto no Catálogo';
+                document.getElementById('btn-salvar-produto').innerText = 'Salvar Produto';
                 document.getElementById('preview-prod-container').style.display = 'none';
                 carregarGerenciador();
                 carregarCatalogo();
@@ -1855,9 +1855,9 @@
         <!-- SEÇÃO: GESTOR -->
         <div id="secao-gestor" class="section">
             <div id="tela-login">
-                <h3 style="margin-bottom: 15px; color: var(--primary);">Acesso Restrito</h3>
+                <h3 style="margin-bottom: 15px; color: var(--primary); font-size: 16px;">Acesso Restrito</h3>
                 <div class="form-group">
-                    <input type="password" id="senha-input" placeholder="Senha (padrão: 1234)">
+                    <input type="password" id="senha-input" placeholder="Senha de acesso">
                 </div>
                 <button class="btn-login" onclick="fazerLogin()">Acessar Painel</button>
             </div>
@@ -1895,9 +1895,9 @@
                         <div class="form-group">
                             <label>WhatsApp dos Vendedores:</label>
                             <div id="vendedores-container-inputs" class="lista-vendedores-gerenciador"></div>
-                            <button type="button" onclick="adicionarCampoVendedor()" style="background:var(--card-border); color:var(--primary); border:1px solid var(--primary); padding:8px; border-radius:6px; cursor:pointer; width:100%; margin-top:10px; font-weight:600;">+ Adicionar Vendedor</button>
+                            <button type="button" onclick="adicionarCampoVendedor()" style="background:var(--dark-bg); color:var(--primary); border:1px solid var(--card-border); padding:8px; border-radius:6px; cursor:pointer; width:100%; margin-top:8px; font-weight:600; font-size:12px;">+ Adicionar Vendedor</button>
                         </div>
-                        <button type="submit" class="btn-submit" style="margin-top: 20px;">Salvar Loja</button>
+                        <button type="submit" class="btn-submit" style="margin-top: 15px;">Salvar Loja</button>
                     </form>
                 </div>
 
@@ -1905,12 +1905,12 @@
                 <div class="form-card">
                     <h2>🏷️ Gerenciamento de Marcas</h2>
                     <form onsubmit="salvarMarca(event)">
-                        <div class="form-group" style="display: flex; gap: 10px;">
+                        <div class="form-group" style="display: flex; gap: 8px;">
                             <input type="text" id="nova-marca-input" placeholder="Nome da Marca (Ex: Lattafa, Armaf...)" required>
-                            <button type="submit" class="btn-submit" style="margin-top:0; width: 140px;">Adicionar</button>
+                            <button type="submit" class="btn-submit" style="margin-top:0; width: 130px;">Adicionar</button>
                         </div>
                     </form>
-                    <div id="lista-marcas-gerenciador" style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;"></div>
+                    <div id="lista-marcas-gerenciador" style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;"></div>
                 </div>
 
                 <div class="form-card">
@@ -1993,24 +1993,24 @@
                         </div>
 
                         <div id="preview-prod-container" class="preview-container">
-                            <p style="font-size:12px; color:var(--primary); margin-bottom:8px;">Prévia das imagens enviadas:</p>
-                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <p style="font-size:11px; color:var(--primary); margin-bottom:8px;">Prévia das imagens enviadas:</p>
+                            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                                 <div style="text-align: center;">
                                     <div class="preview-box-img"><img id="preview-prod-img-1" alt="Preview 1"></div>
-                                    <button type="button" onclick="removerFotoProduto(0)" style="background:var(--danger); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; margin-top:6px;">🗑️ Remover 1</button>
+                                    <button type="button" onclick="removerFotoProduto(0)" style="background:var(--danger); color:#fff; border:none; padding:3px 6px; border-radius:4px; font-size:10px; cursor:pointer; margin-top:5px;">🗑️ Remover 1</button>
                                 </div>
                                 <div style="text-align: center;">
                                     <div class="preview-box-img"><img id="preview-prod-img-2" alt="Preview 2"></div>
-                                    <button type="button" onclick="removerFotoProduto(1)" style="background:var(--danger); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; margin-top:6px;">🗑️ Remover 2</button>
+                                    <button type="button" onclick="removerFotoProduto(1)" style="background:var(--danger); color:#fff; border:none; padding:3px 6px; border-radius:4px; font-size:10px; cursor:pointer; margin-top:5px;">🗑️ Remover 2</button>
                                 </div>
                                 <div style="text-align: center;">
                                     <div class="preview-box-img"><img id="preview-prod-img-3" alt="Preview 3"></div>
-                                    <button type="button" onclick="removerFotoProduto(2)" style="background:var(--danger); color:#fff; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer; margin-top:6px;">🗑️ Remover 3</button>
+                                    <button type="button" onclick="removerFotoProduto(2)" style="background:var(--danger); color:#fff; border:none; padding:3px 6px; border-radius:4px; font-size:10px; cursor:pointer; margin-top:5px;">🗑️ Remover 3</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group" style="margin-top: 15px;">
+                        <div class="form-group" style="margin-top: 12px;">
                             <label>Descrição:</label>
                             <textarea id="descricao" rows="3" required placeholder="Ex: Perfume importado..."></textarea>
                         </div>
@@ -2018,10 +2018,10 @@
                     </form>
                 </div>
                 
-                <div style="margin-top: 40px; max-width: 650px; margin: 0 auto;">
-                    <h3 style="color: var(--primary); margin-bottom: 15px;">Produtos Cadastrados</h3>
+                <div style="margin-top: 30px; max-width: 650px; margin: 0 auto;">
+                    <h3 style="color: var(--primary); margin-bottom: 12px; font-size: 16px;">Produtos Cadastrados</h3>
                     
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
                         <input type="text" id="busca-gestor" placeholder="🔍 Filtrar produtos cadastrados..." oninput="filtrarGestorProdutos()" style="flex: 2;">
                         <select id="filtro-status-gestor" onchange="filtrarGestorProdutos()" style="flex: 1;">
                             <option value="todos">Todos os Status</option>
@@ -2042,27 +2042,60 @@
     </div>
 
     <!-- Modais -->
-    <div id="modal-ampliar-imagem" class="modal-overlay">
-        <div class="modal-imagem-content">
-            <button class="btn-fechar-img-modal" onclick="fecharModalImagem()">&times;</button>
-            <h3 id="titulo-imagem-ampliada" style="color: var(--primary); margin-bottom: 15px; font-size: 16px; text-align: center; padding-right: 30px;"></h3>
+    <div id="modal-detalhes-produto" class="modal-overlay">
+        <div class="modal-detalhes-conteudo">
+            <button class="btn-fechar-img-modal" onclick="fecharDetalhesProduto()" style="position: absolute; top: 15px; right: 15px; background: var(--dark-bg); border: 1px solid var(--card-border); color: var(--text-main); width: 32px; height: 32px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">&times;</button>
             
-            <div class="modal-img-container">
-                <img id="imagem-ampliada" src="" alt="Ampliada">
+            <div id="modal-detalhes-marca" style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;"></div>
+            <h3 id="modal-detalhes-titulo" style="color: var(--text-main); margin-bottom: 12px; font-size: 18px; padding-right: 30px;"></h3>
+            
+            <!-- Galeria Principal (Ampliada para 340px e com clique para zoom) -->
+            <div class="modal-galeria-box" onclick="abrirZoomFoto()">
+                <img id="modal-detalhes-img-principal" src="" alt="Produto Detalhe" class="modal-galeria-img">
             </div>
 
-            <div id="modal-zoom-nav-box" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 15px; padding: 0 10px;">
+            <!-- Miniaturas -->
+            <div id="modal-detalhes-miniaturas" class="modal-minhas-fotos" style="display: none;"></div>
+
+            <!-- Descrição Completa -->
+            <div style="margin-bottom: 15px;">
+                <label style="margin-bottom: 4px;">Descrição Completa:</label>
+                <p id="modal-detalhes-texto-completo" style="font-size: 13px; color: var(--text-muted); line-height: 1.5; max-height: 120px; overflow-y: auto; background: var(--dark-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--card-border);"></p>
+            </div>
+
+            <!-- Preços e Controles de Compra -->
+            <div style="background: var(--dark-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <div id="modal-preco-subtotal" style="font-size: 18px; font-weight: 700; color: var(--text-main);">R$ 0,00</div>
+                        <div id="modal-pix-subtotal" style="font-size: 13px; font-weight: 700; color: var(--pix-color); display: none;">R$ 0,00 no PIX</div>
+                    </div>
+                    <div class="controle-qtd-box" style="padding: 4px 10px;">
+                        <button class="btn-qtd" onclick="alterarQtdModalDetalhes(-1)">-</button>
+                        <span id="modal-qtd-num" style="font-weight: 700; min-width: 22px; text-align: center; font-size: 14px;">1</span>
+                        <button class="btn-qtd" onclick="alterarQtdModalDetalhes(1)">+</button>
+                    </div>
+                </div>
+                <button class="btn-add-carrinho" onclick="adicionarAoCarrinhoPeloModal()" style="padding: 11px; font-size: 12px;">🛒 Adicionar ao Carrinho</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal de Zoom / Tela Cheia da Imagem -->
+    <div id="modal-zoom-foto" class="modal-overlay" onclick="fecharZoomFoto()">
+        <div class="zoom-conteudo" onclick="event.stopPropagation()">
+            <button onclick="fecharZoomFoto()" style="position: absolute; top: -45px; right: 0; background: var(--card-bg); border: 1px solid var(--card-border); color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+            <img id="img-zoom-tela-cheia" src="" alt="Zoom Foto">
+        </div>
+    </div>
+
     <div id="modal-aviso-sucesso" class="modal-overlay">
-        <div class="modal-content" style="text-align: center; max-width: 400px;">
-            <h3 style="color: var(--primary); margin-bottom: 15px;">Produto Adicionado!</h3>
-            <p id="texto-aviso-sucesso" style="font-size: 15px; margin-bottom: 25px; color: var(--text-main);"></p>
-            <div style="display: flex; gap: 12px;">
-                <button type="button" onclick="fecharAvisoContinuar()" style="flex: 1; background: var(--card-border); color: var(--text-main); border: 1px solid var(--primary); padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase;">Continuar</button>
-                <button type="button" onclick="acaoAgendarDoAviso()" style="flex: 1; background: var(--primary); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase;">Carrinho</button>
+        <div class="modal-content" style="text-align: center; max-width: 380px;">
+            <h3 style="color: var(--primary); margin-bottom: 12px; font-size: 16px;">Produto Adicionado!</h3>
+            <p id="texto-aviso-sucesso" style="font-size: 14px; margin-bottom: 20px; color: var(--text-main);"></p>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" onclick="fecharAvisoContinuar()" style="flex: 1; background: var(--dark-bg); color: var(--text-main); border: 1px solid var(--card-border); padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 12px;">Continuar</button>
+                <button type="button" onclick="acaoAgendarDoAviso()" style="flex: 1; background: var(--primary); color: #000; border: none; padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 12px;">Carrinho</button>
             </div>
         </div>
     </div>
@@ -2093,11 +2126,11 @@
                     <label>Seu Nome:</label>
                     <input type="text" id="checkout-nome" required placeholder="Ex: João da Silva">
                 </div>
-                <div class="app-group form-group">
+                <div class="form-group">
                     <label>Seu WhatsApp:</label>
                     <input type="text" id="checkout-telefone" required placeholder="Ex: (21) 99999-9999">
                 </div>
-                <button type="submit" class="btn-submit" style="background: var(--whatsapp); color:#fff; margin-top: 15px;">Enviar Pedido via WhatsApp 🚀</button>
+                <button type="submit" class="btn-submit" style="background: var(--whatsapp); color:#fff; margin-top: 12px;">Enviar Pedido via WhatsApp 🚀</button>
             </form>
         </div>
     </div>
