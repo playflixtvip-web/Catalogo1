@@ -496,6 +496,11 @@
 
         @media (min-width: 768px) { .tag-encomenda { top: 12px; left: 12px; padding: 5px 10px; font-size: 11px; } }
 
+        .tag-esgotado {
+            background: var(--danger) !important;
+            color: #fff !important;
+        }
+
         .tag-desconto {
             position: absolute;
             top: 8px;
@@ -725,6 +730,16 @@
 
         .btn-add-carrinho:hover { background: var(--primary-dark); color: #fff; }
 
+        .btn-esgotado {
+            background: var(--card-border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+        .btn-esgotado:hover {
+            background: var(--card-border);
+            color: var(--text-muted);
+        }
+
         /* Barra Flutuante do Carrinho */
         .carrinho-flutuante {
             position: fixed;
@@ -830,9 +845,11 @@
             border-radius: 10px; display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 10px; color: #fff;
         }
-        .acoes-gestor { display: flex; gap: 8px; }
+        .acoes-gestor { display: flex; gap: 8px; align-items: center; }
         .btn-editar { background: var(--warning); color: #000; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
         .btn-excluir { background: var(--danger); color: white; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
+        .btn-status-toggle { background: var(--card-border); color: #fff; border: 1px solid var(--primary); padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        
         .sem-produtos { text-align: center; grid-column: 1 / -1; padding: 60px 20px; color: var(--text-muted); font-size: 16px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-standard); }
 
         .preview-container { margin-top: 12px; background: var(--dark-bg); border: 1px dashed var(--primary); padding: 12px; border-radius: 8px; text-align: center; display: none; }
@@ -1055,19 +1072,23 @@
                     const subtotalPixStr = subtotalPixNum.toFixed(2).replace('.', ',');
 
                     let imgInicial = listaImagens[0] || 'https://via.placeholder.com/280x230?text=Sem+Foto';
+                    const disponivel = prod.status !== 'indisponivel';
 
-                    const carItem = document.createElement('div');
-                    carItem.className = 'carrossel-item';
-                    carItem.onclick = () => {
-                        const el = document.querySelector(`[data-id="${id}"]`);
-                        if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    };
-                    carItem.innerHTML = `
-                        <div class="carrossel-img-box"><img src="${imgInicial}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};"></div>
-                        <div class="carrossel-nome">${prod.nome}</div>
-                        <div class="carrossel-preco" style="color: ${descPix > 0 ? 'var(--pix-color)' : 'var(--primary)'}">R$ ${descPix > 0 ? subtotalPixStr : calc.precoFinal}</div>
-                    `;
-                    carrosselTrack.appendChild(carItem);
+                    // Apenas adiciona ao carrossel se estiver disponível
+                    if (disponivel) {
+                        const carItem = document.createElement('div');
+                        carItem.className = 'carrossel-item';
+                        carItem.onclick = () => {
+                            const el = document.querySelector(`[data-id="${id}"]`);
+                            if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        };
+                        carItem.innerHTML = `
+                            <div class="carrossel-img-box"><img src="${imgInicial}" alt="${prod.nome}" class="carrossel-img" style="object-fit: ${prod.ajusteImagem || 'contain'};"></div>
+                            <div class="carrossel-nome">${prod.nome}</div>
+                            <div class="carrossel-preco" style="color: ${descPix > 0 ? 'var(--pix-color)' : 'var(--primary)'}">R$ ${descPix > 0 ? subtotalPixStr : calc.precoFinal}</div>
+                        `;
+                        carrosselTrack.appendChild(carItem);
+                    }
 
                     let dotsHtml = '';
                     let arrowsHtml = '';
@@ -1091,8 +1112,8 @@
                     card.setAttribute('data-marca', prod.marca || '');
                     
                     card.innerHTML = `
-                        <div class="tag-encomenda">📦 Sob Encomenda</div>
-                        ${calc.temDesconto ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
+                        ${disponivel ? '<div class="tag-encomenda">📦 Sob Encomenda</div>' : '<div class="tag-encomenda tag-esgotado">❌ Esgotado</div>'}
+                        ${calc.temDesconto && disponivel ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
                         <div class="produto-img-box" onclick="ampliarImagemAtual('${id}')">
                             ${arrowsHtml}
                             <img src="${imgInicial}" alt="${prod.nome}" class="produto-img" id="img-card-${id}" style="object-fit: ${prod.ajusteImagem || 'contain'};">
@@ -1104,18 +1125,22 @@
                             <div class="produto-desc" id="desc-${id}">${prod.descricao || ''}</div>
                             ${prod.descricao && prod.descricao.length > 50 ? `<button class="btn-ver-mais" onclick="alternarDescricao('${id}')" id="btn-desc-${id}">Ver mais</button>` : ''}
                             <div class="preco-box">
-                                ${calc.temDesconto ? `<span class="preco-antigo">R$ ${prod.preco}</span>` : ''}
+                                ${calc.temDesconto && disponivel ? `<span class="preco-antigo">R$ ${prod.preco}</span>` : ''}
                                 <div class="produto-preco" id="preco-total-card-${id}">R$ ${subtotalCardStr}</div>
-                                ${descPix > 0 ? `<div class="preco-pix" id="preco-pix-card-${id}">R$ ${subtotalPixStr} no PIX</div>` : ''}
+                                ${descPix > 0 && disponivel ? `<div class="preco-pix" id="preco-pix-card-${id}">R$ ${subtotalPixStr} no PIX</div>` : ''}
                             </div>
                         </div>
                         <div class="produto-acoes-footer">
-                            <div class="card-qtd-controle">
-                                <button class="card-qtd-btn" onclick="alterarQtdCard('${id}', -1, ${precoUnitarioNum})">-</button>
-                                <span class="card-qtd-numero" id="qtd-card-num-${id}">${qtdAtual}</span>
-                                <button class="card-qtd-btn" onclick="alterarQtdCard('${id}', 1, ${precoUnitarioNum})">+</button>
-                            </div>
-                            <button class="btn-add-carrinho" onclick="adicionarComQtdCard('${id}')">🛒 Adicionar</button>
+                            ${disponivel ? `
+                                <div class="card-qtd-controle">
+                                    <button class="card-qtd-btn" onclick="alterarQtdCard('${id}', -1, ${precoUnitarioNum})">-</button>
+                                    <span class="card-qtd-numero" id="qtd-card-num-${id}">${qtdAtual}</span>
+                                    <button class="card-qtd-btn" onclick="alterarQtdCard('${id}', 1, ${precoUnitarioNum})">+</button>
+                                </div>
+                                <button class="btn-add-carrinho" onclick="adicionarComQtdCard('${id}')">🛒 Adicionar</button>
+                            ` : `
+                                <button class="btn-add-carrinho btn-esgotado" disabled>Indisponível no Momento</button>
+                            `}
                         </div>
                     `;
                     container.appendChild(card);
@@ -1218,7 +1243,7 @@
 
         window.adicionarComQtdCard = function(id) {
             const produto = produtosGlobais[id];
-            if (!produto) return;
+            if (!produto || produto.status === 'indisponivel') return;
 
             const qtdParaAdicionar = quantidadesCards[id] || 1;
             const calc = calcularPrecoFinal(produto.preco, produto.tipoDesconto, produto.valorDesconto);
@@ -1493,28 +1518,68 @@
                     const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
                     const precoMostra = calc.temDesconto ? `R$ ${calc.precoFinal} (Promo)` : `R$ ${prod.preco}`;
                     let imgCapa = (prod.imagens && prod.imagens[0]) ? prod.imagens[0] : (prod.imagem || 'https://via.placeholder.com/45');
+                    
+                    const isIndisponivel = prod.status === 'indisponivel';
+                    const statusTexto = isIndisponivel ? '🔴 Indisponível' : '🟢 Disponível';
+                    const statusCor = isIndisponivel ? 'var(--danger)' : 'var(--pix-color)';
 
                     const item = document.createElement('div');
                     item.className = 'item-gerenciador';
+                    item.setAttribute('data-nome-gestor', (prod.nome || '').toLowerCase());
+                    item.setAttribute('data-status-gestor', prod.status || 'disponivel');
+
                     item.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <img src="${imgCapa}" style="width: 45px; height: 45px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/45'">
                             <div>
                                 <strong style="color: var(--text-main);">${prod.nome || 'Produto Sem Nome'}</strong><br>
-                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span>
+                                <span style="font-size: 13px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
+                                <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span>
                             </div>
                         </div>
                         <div class="acoes-gestor">
+                            <button class="btn-status-toggle" onclick="alternarStatusProduto('${id}', '${prod.status || 'disponivel'}')">${isIndisponivel ? 'Ativar' : 'Pausar'}</button>
                             <button class="btn-editar" onclick="prepararEdicao('${id}')">Editar</button>
                             <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
                         </div>
                     `;
                     container.appendChild(item);
                 });
+                filtrarGestorProdutos();
             } catch (error) { console.error(error); }
         }
 
-        // Função corrigida: Busca direto no Firebase para garantir que mesmo produtos antigos abram perfeitamente
+        window.filtrarGestorProdutos = function() {
+            const termo = document.getElementById('busca-gestor').value.toLowerCase().trim();
+            const filtroStatus = document.getElementById('filtro-status-gestor').value;
+            const itens = document.querySelectorAll('.item-gerenciador');
+
+            itens.forEach(item => {
+                const nome = item.getAttribute('data-nome-gestor');
+                const status = item.getAttribute('data-status-gestor');
+
+                const matchNome = nome.includes(termo);
+                const matchStatus = (filtroStatus === 'todos' || status === filtroStatus);
+
+                if (matchNome && matchStatus) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        window.alternarStatusProduto = async function(id, statusAtual) {
+            const novoStatus = statusAtual === 'indisponivel' ? 'disponivel' : 'indisponivel';
+            try {
+                await setDoc(doc(db, "produtos", id), { status: novoStatus }, { merge: true });
+                carregarGerenciador();
+                carregarCatalogo();
+            } catch (e) {
+                alert('Erro ao alterar status do produto.');
+            }
+        }
+
         window.prepararEdicao = async function(id) {
             try {
                 const docSnap = await getDoc(doc(db, "produtos", id));
@@ -1532,6 +1597,7 @@
                 document.getElementById('categoria').value = prod.categoria || 'masculino';
                 document.getElementById('marca-produto').value = prod.marca || '';
                 document.getElementById('desconto-pix').value = prod.descontoPix || '';
+                document.getElementById('status-produto').value = prod.status || 'disponivel';
                 document.getElementById('descricao').value = prod.descricao || '';
                 document.getElementById('img-fit').value = prod.ajusteImagem || 'contain';
                 
@@ -1637,6 +1703,7 @@
                     categoria: document.getElementById('categoria').value,
                     marca: document.getElementById('marca-produto').value,
                     descontoPix: document.getElementById('desconto-pix').value,
+                    status: document.getElementById('status-produto').value,
                     imagem: listaImagensValidas[0], 
                     imagens: listaImagensValidas,   
                     ajusteImagem: document.getElementById('img-fit').value,
@@ -1807,9 +1874,18 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Desconto no PIX (%):</label>
-                            <input type="number" id="desconto-pix" placeholder="Ex: 10" min="0" max="100">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Desconto no PIX (%):</label>
+                                <input type="number" id="desconto-pix" placeholder="Ex: 10" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Status do Produto:</label>
+                                <select id="status-produto">
+                                    <option value="disponivel">Disponível (Ativo)</option>
+                                    <option value="indisponivel">Indisponível (Esgotado)</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- Até 3 Imagens do Produto -->
@@ -1855,6 +1931,17 @@
                 
                 <div style="margin-top: 40px; max-width: 650px; margin: 0 auto;">
                     <h3 style="color: var(--primary); margin-bottom: 15px;">Produtos Cadastrados</h3>
+                    
+                    <!-- Barra de Busca e Filtro de Status para o Gestor -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="busca-gestor" placeholder="🔍 Filtrar produtos cadastrados..." oninput="filtrarGestorProdutos()" style="flex: 2;">
+                        <select id="filtro-status-gestor" onchange="filtrarGestorProdutos()" style="flex: 1;">
+                            <option value="todos">Todos os Status</option>
+                            <option value="disponivel">Disponíveis</option>
+                            <option value="indisponivel">Indisponíveis</option>
+                        </select>
+                    </div>
+
                     <div id="lista-gerenciador"></div>
                 </div>
             </div>
