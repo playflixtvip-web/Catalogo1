@@ -1596,51 +1596,88 @@
                     return;
                 }
 
+                // Agrupar produtos por categoria
+                const categoriasDict = {
+                    'masculino': 'Masculino',
+                    'feminino': 'Feminino',
+                    'unissex': 'Unissex',
+                    'kids': 'Kids',
+                    'body-splash': 'Body Splash'
+                };
+
+                let produtosPorCat = {};
                 querySnapshot.forEach((docSnap) => {
                     const prod = docSnap.data();
-                    const id = docSnap.id;
-                    const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
-                    const precoMostra = calc.temDesconto ? `R$ ${calc.precoFinal} (Promo)` : `R$ ${prod.preco}`;
-                    let imgCapa = (prod.imagens && prod.imagens[0]) ? prod.imagens[0] : (prod.imagem || 'https://via.placeholder.com/45');
-                    
-                    const isIndisponivel = prod.status === 'indisponivel';
-                    const statusTexto = isIndisponivel ? '🔴 Indisponível' : '🟢 Disponível';
-                    const statusCor = isIndisponivel ? 'var(--danger)' : 'var(--pix-color)';
-
-                    const isPromo = prod.promocao === true;
-
-                    const item = document.createElement('div');
-                    item.className = 'item-gerenciador';
-                    item.setAttribute('data-nome-gestor', (prod.nome || '').toLowerCase());
-                    item.setAttribute('data-status-gestor', prod.status || 'disponivel');
-
-                    item.innerHTML = `
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <img src="${imgCapa}" style="width: 40px; height: 40px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/40'">
-                            <div>
-                                <strong style="color: var(--text-main); font-size: 13px;">${prod.nome || 'Produto Sem Nome'}</strong><br>
-                                <span style="font-size: 12px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
-                                <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span> ${isPromo ? '<span style="font-size: 11px; font-weight: 700; color: var(--primary);">| 🔥 Promoção</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="acoes-gestor">
-                            <button class="btn-status-toggle" style="background: ${isPromo ? 'var(--primary)' : 'var(--card-border)'}; color: ${isPromo ? '#000' : '#fff'};" onclick="alternarPromocaoProduto('${id}', ${isPromo})">${isPromo ? 'Tirar Promo' : 'Colocar Promo'}</button>
-                            <button class="btn-status-toggle" onclick="alternarStatusProduto('${id}', '${prod.status || 'disponivel'}')">${isIndisponivel ? 'Ativar' : 'Pausar'}</button>
-                            <button class="btn-editar" onclick="prepararEdicao('${id}')">Editar</button>
-                            <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
-                        </div>
-                    `;
-                    container.appendChild(item);
+                    const cat = prod.categoria || 'masculino';
+                    if (!produtosPorCat[cat]) produtosPorCat[cat] = [];
+                    produtosPorCat[cat].push({ id: docSnap.id, ...prod });
                 });
+
+                for (let catKey in produtosPorCat) {
+                    let nomeCatExibicao = categoriasDict[catKey] || catKey.toUpperCase();
+                    
+                    const grupoDiv = document.createElement('div');
+                    grupoDiv.className = 'grupo-categoria-gestor';
+                    grupoDiv.setAttribute('data-categoria', catKey);
+                    grupoDiv.innerHTML = `
+                        <h4 style="color: var(--primary); margin: 20px 0 10px 0; font-size: 14px; text-transform: uppercase; border-bottom: 1px solid var(--card-border); padding-bottom: 5px; letter-spacing: 1px;">🏷️ ${nomeCatExibicao}</h4>
+                    `;
+
+                    const itensContainer = document.createElement('div');
+                    itensContainer.className = 'itens-grupo-gestor';
+
+                    produtosPorCat[catKey].forEach(prod => {
+                        const id = prod.id;
+                        const calc = calcularPrecoFinal(prod.preco, prod.tipoDesconto, prod.valorDesconto);
+                        const precoMostra = calc.temDesconto ? `R$ ${calc.precoFinal} (Promo)` : `R$ ${prod.preco}`;
+                        let imgCapa = (prod.imagens && prod.imagens[0]) ? prod.imagens[0] : (prod.imagem || 'https://via.placeholder.com/45');
+                        
+                        const isIndisponivel = prod.status === 'indisponivel';
+                        const statusTexto = isIndisponivel ? '🔴 Indisponível' : '🟢 Disponível';
+                        const statusCor = isIndisponivel ? 'var(--danger)' : 'var(--pix-color)';
+
+                        const isPromo = prod.promocao === true;
+
+                        const item = document.createElement('div');
+                        item.className = 'item-gerenciador';
+                        item.setAttribute('data-nome-gestor', (prod.nome || '').toLowerCase());
+                        item.setAttribute('data-status-gestor', prod.status || 'disponivel');
+
+                        item.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="${imgCapa}" style="width: 40px; height: 40px; object-fit: ${prod.ajusteImagem || 'contain'}; border-radius: 6px; background: #000;" onerror="this.src='https://via.placeholder.com/40'">
+                                <div>
+                                    <strong style="color: var(--text-main); font-size: 13px;">${prod.nome || 'Produto Sem Nome'}</strong><br>
+                                    <span style="font-size: 12px; color: var(--primary);">${precoMostra} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
+                                    <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span> ${isPromo ? '<span style="font-size: 11px; font-weight: 700; color: var(--primary);">| 🔥 Promoção</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="acoes-gestor">
+                                <button class="btn-status-toggle" style="background: ${isPromo ? 'var(--primary)' : 'var(--card-border)'}; color: ${isPromo ? '#000' : '#fff'};" onclick="alternarPromocaoProduto('${id}', ${isPromo})">${isPromo + '' === 'true' ? 'Tirar Promo' : 'Colocar Promo'}</button>
+                                <button class="btn-status-toggle" onclick="alternarStatusProduto('${id}', '${prod.status || 'disponivel'}')">${isIndisponivel ? 'Ativar' : 'Pausar'}</button>
+                                <button class="btn-editar" onclick="prepararEdicao('${id}')">Editar</button>
+                                <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
+                            </div>
+                        `;
+                        itensContainer.appendChild(item);
+                    });
+
+                    grupoDiv.appendChild(itensContainer);
+                    container.appendChild(grupoDiv);
+                }
+
                 filtrarGestorProdutos();
             } catch (error) { console.error(error); }
         }
 
         window.alternarPromocaoProduto = async function(id, promoAtual) {
             try {
-                await setDoc(doc(db, "produtos", id), { promocao: !promoAtual }, { merge: true });
-                carregarGerenciador();
-                carregarCatalogo();
+                const scrollPos = window.scrollY;
+                const novoValor = !promoAtual;
+                await setDoc(doc(db, "produtos", id), { promocao: novoValor }, { merge: true });
+                await carregarGerenciador();
+                await carregarCatalogo();
+                window.scrollTo(0, scrollPos);
             } catch (e) {
                 alert('Erro ao alterar status de promoção.');
             }
@@ -1649,19 +1686,31 @@
         window.filtrarGestorProdutos = function() {
             const termo = document.getElementById('busca-gestor').value.toLowerCase().trim();
             const filtroStatus = document.getElementById('filtro-status-gestor').value;
-            const itens = document.querySelectorAll('.item-gerenciador');
+            const gruposCat = document.querySelectorAll('.grupo-categoria-gestor');
 
-            itens.forEach(item => {
-                const nome = item.getAttribute('data-nome-gestor');
-                const status = item.getAttribute('data-status-gestor');
+            gruposCat.forEach(grupo => {
+                const itens = grupo.querySelectorAll('.item-gerenciador');
+                let itensVisiveis = 0;
 
-                const matchNome = nome.includes(termo);
-                const matchStatus = (filtroStatus === 'todos' || status === filtroStatus);
+                itens.forEach(item => {
+                    const nome = item.getAttribute('data-nome-gestor');
+                    const status = item.getAttribute('data-status-gestor');
 
-                if (matchNome && matchStatus) {
-                    item.style.display = 'flex';
+                    const matchNome = nome.includes(termo);
+                    const matchStatus = (filtroStatus === 'todos' || status === filtroStatus);
+
+                    if (matchNome && matchStatus) {
+                        item.style.display = 'flex';
+                        itensVisiveis++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                if (itensVisiveis > 0) {
+                    grupo.style.display = 'block';
                 } else {
-                    item.style.display = 'none';
+                    grupo.style.display = 'none';
                 }
             });
         }
@@ -1669,9 +1718,11 @@
         window.alternarStatusProduto = async function(id, statusAtual) {
             const novoStatus = statusAtual === 'indisponivel' ? 'disponivel' : 'indisponivel';
             try {
+                const scrollPos = window.scrollY;
                 await setDoc(doc(db, "produtos", id), { status: novoStatus }, { merge: true });
-                carregarGerenciador();
-                carregarCatalogo();
+                await carregarGerenciador();
+                await carregarCatalogo();
+                window.scrollTo(0, scrollPos);
             } catch (e) {
                 alert('Erro ao alterar status do produto.');
             }
@@ -1727,9 +1778,11 @@
         window.deletarProduto = async function(id) {
             if (confirm('Deseja excluir este produto?')) {
                 try {
+                    const scrollPos = window.scrollY;
                     await deleteDoc(doc(db, "produtos", id));
-                    carregarGerenciador();
-                    carregarCatalogo();
+                    await carregarGerenciador();
+                    await carregarCatalogo();
+                    window.scrollTo(0, scrollPos);
                 } catch (e) { alert('Erro ao excluir.'); }
             }
         }
