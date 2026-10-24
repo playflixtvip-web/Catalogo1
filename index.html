@@ -842,7 +842,7 @@
             border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 8px; color: #fff;
         }
-        .acoes-gestor { display: flex; gap: 6px; align-items: center; }
+        .acoes-gestor { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
         .btn-editar { background: var(--warning); color: #000; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 700; }
         .btn-excluir { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 700; }
         .btn-status-toggle { background: var(--card-border); color: #fff; border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 600; }
@@ -1104,9 +1104,11 @@
                     card.setAttribute('data-nome', (prod.nome || '').toLowerCase());
                     card.setAttribute('data-categoria', prod.categoria || 'masculino');
                     card.setAttribute('data-marca', prod.marca || '');
+                    card.setAttribute('data-promocao', prod.promocao ? 'true' : 'false');
                     
                     card.innerHTML = `
                         ${disponivel ? '<div class="tag-encomenda">📦 Sob Encomenda</div>' : '<div class="tag-encomenda tag-esgotado">❌ Esgotado</div>'}
+                        ${prod.promocao && disponivel ? '<div class="tag-encomenda" style="top: 28px; background: var(--primary); color: #000;">🔥 Promo</div>' : ''}
                         ${calc.temDesconto && disponivel ? `<div class="tag-desconto">${calc.textoTag}</div>` : ''}
                         <div class="produto-img-box" onclick="abrirDetalhesProduto('${id}')">
                             <img src="${imgInicial}" alt="${prod.nome}" class="produto-img" id="img-card-${id}" style="object-fit: ${prod.ajusteImagem || 'contain'};">
@@ -1283,9 +1285,19 @@
                 const nome = card.getAttribute('data-nome');
                 const cat = card.getAttribute('data-categoria');
                 const marca = card.getAttribute('data-marca');
+                const isPromo = card.getAttribute('data-promocao') === 'true';
                 
                 const matchNome = nome.includes(termo);
-                const matchCat = (categoriaSelecionada === 'todos' || cat === categoriaSelecionada);
+                let matchCat = false;
+
+                if (categoriaSelecionada === 'todos') {
+                    matchCat = true;
+                } else if (categoriaSelecionada === 'promocao') {
+                    matchCat = isPromo;
+                } else {
+                    matchCat = (cat === categoriaSelecionada);
+                }
+
                 const matchMarca = (marcaSelecionada === 'todas' || marca === marcaSelecionada);
 
                 if (matchNome && matchCat && matchMarca) card.style.display = 'flex';
@@ -1595,6 +1607,8 @@
                     const statusTexto = isIndisponivel ? '🔴 Indisponível' : '🟢 Disponível';
                     const statusCor = isIndisponivel ? 'var(--danger)' : 'var(--pix-color)';
 
+                    const isPromo = prod.promocao === true;
+
                     const item = document.createElement('div');
                     item.className = 'item-gerenciador';
                     item.setAttribute('data-nome-gestor', (prod.nome || '').toLowerCase());
@@ -1606,10 +1620,11 @@
                             <div>
                                 <strong style="color: var(--text-main); font-size: 13px;">${prod.nome || 'Produto Sem Nome'}</strong><br>
                                 <span style="font-size: 12px; color: var(--primary);">${precoMostra} | ${prod.categoria || 'masculino'} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
-                                <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span>
+                                <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span> ${isPromo ? '<span style="font-size: 11px; font-weight: 700; color: var(--primary);">| 🔥 Promoção</span>' : ''}
                             </div>
                         </div>
                         <div class="acoes-gestor">
+                            <button class="btn-status-toggle" style="background: ${isPromo ? 'var(--primary)' : 'var(--card-border)'}; color: ${isPromo ? '#000' : '#fff'};" onclick="alternarPromocaoProduto('${id}', ${isPromo})">${isPromo ? 'Tirar Promo' : 'Colocar Promo'}</button>
                             <button class="btn-status-toggle" onclick="alternarStatusProduto('${id}', '${prod.status || 'disponivel'}')">${isIndisponivel ? 'Ativar' : 'Pausar'}</button>
                             <button class="btn-editar" onclick="prepararEdicao('${id}')">Editar</button>
                             <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
@@ -1619,6 +1634,16 @@
                 });
                 filtrarGestorProdutos();
             } catch (error) { console.error(error); }
+        }
+
+        window.alternarPromocaoProduto = async function(id, promoAtual) {
+            try {
+                await setDoc(doc(db, "produtos", id), { promocao: !promoAtual }, { merge: true });
+                carregarGerenciador();
+                carregarCatalogo();
+            } catch (e) {
+                alert('Erro ao alterar status de promoção.');
+            }
         }
 
         window.filtrarGestorProdutos = function() {
@@ -1670,6 +1695,7 @@
                 document.getElementById('marca-produto').value = prod.marca || '';
                 document.getElementById('desconto-pix').value = prod.descontoPix || '';
                 document.getElementById('status-produto').value = prod.status || 'disponivel';
+                document.getElementById('promocao-produto').checked = !!prod.promocao;
                 document.getElementById('descricao').value = prod.descricao || '';
                 document.getElementById('img-fit').value = prod.ajusteImagem || 'contain';
                 
@@ -1780,6 +1806,7 @@
                     marca: document.getElementById('marca-produto').value,
                     descontoPix: document.getElementById('desconto-pix').value,
                     status: document.getElementById('status-produto').value,
+                    promocao: document.getElementById('promocao-produto').checked,
                     imagem: listaImagensValidas[0], 
                     imagens: listaImagensValidas,   
                     ajusteImagem: document.getElementById('img-fit').value,
@@ -1843,6 +1870,7 @@
 
             <div class="categorias-catalogo">
                 <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos</button>
+                <button class="cat-btn" onclick="filtrarCategoria('promocao', this)">🔥 Promoções</button>
                 <button class="cat-btn" onclick="filtrarCategoria('masculino', this)">Masculino</button>
                 <button class="cat-btn" onclick="filtrarCategoria('feminino', this)">Feminino</button>
                 <button class="cat-btn" onclick="filtrarCategoria('unissex', this)">Unissex</button>
@@ -1968,6 +1996,12 @@
                                     <option value="indisponivel">Indisponível (Esgotado)</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--primary); font-size: 13px;">
+                                <input type="checkbox" id="promocao-produto" style="width: 18px; height: 18px; cursor: pointer;"> 🔥 Destacar na aba de Promoções do Catálogo
+                            </label>
                         </div>
 
                         <!-- Até 3 Imagens do Produto com Botão de Remover -->
