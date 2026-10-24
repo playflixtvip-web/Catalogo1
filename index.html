@@ -746,7 +746,6 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.9);
         }
 
-        /* Foto principal maior nos detalhes (340px) com dica de zoom */
         .modal-galeria-box {
             width: 100%;
             height: 340px;
@@ -1046,14 +1045,13 @@
                 container.innerHTML = '';
                 carrosselTrack.innerHTML = '';
                 produtosGlobais = {};
+                let quantidadeDestaquesCarrossel = 0;
 
                 if (querySnapshot.empty) {
                     container.innerHTML = '<div class="sem-produtos">Nenhum produto cadastrado no momento.</div>';
                     carrosselContainer.style.display = 'none';
                     return;
                 }
-
-                carrosselContainer.style.display = 'block';
 
                 querySnapshot.forEach((docSnap) => {
                     const prod = docSnap.data();
@@ -1086,7 +1084,9 @@
                     let imgInicial = listaImagens[0] || 'https://via.placeholder.com/280x230?text=Sem+Foto';
                     const disponivel = prod.status !== 'indisponivel';
 
-                    if (disponivel) {
+                    // O carrossel superior mostra APENAS produtos marcados como DESTAQUE (destaque === true) e Disponíveis
+                    if (disponivel && prod.destaque) {
+                        quantidadeDestaquesCarrossel++;
                         const carItem = document.createElement('div');
                         carItem.className = 'carrossel-item';
                         carItem.onclick = () => abrirDetalhesProduto(id);
@@ -1105,6 +1105,7 @@
                     card.setAttribute('data-categoria', prod.categoria || 'masculino');
                     card.setAttribute('data-marca', prod.marca || '');
                     card.setAttribute('data-promocao', prod.promocao ? 'true' : 'false');
+                    card.setAttribute('data-destaque', prod.destaque ? 'true' : 'false');
                     
                     card.innerHTML = `
                         ${disponivel ? '<div class="tag-encomenda">📦 Sob Encomenda</div>' : '<div class="tag-encomenda tag-esgotado">❌ Esgotado</div>'}
@@ -1138,6 +1139,13 @@
                     `;
                     container.appendChild(card);
                 });
+
+                if (quantidadeDestaquesCarrossel > 0) {
+                    carrosselContainer.style.display = 'block';
+                } else {
+                    carrosselContainer.style.display = 'none';
+                }
+
                 atualizarCarrinhoUI();
                 filtrarProdutos();
             } catch (error) {
@@ -1637,6 +1645,7 @@
                         const statusCor = isIndisponivel ? 'var(--danger)' : 'var(--pix-color)';
 
                         const isPromo = prod.promocao === true;
+                        const isDestaque = prod.destaque === true;
 
                         const item = document.createElement('div');
                         item.className = 'item-gerenciador';
@@ -1649,11 +1658,14 @@
                                 <div>
                                     <strong style="color: var(--text-main); font-size: 13px;">${prod.nome || 'Produto Sem Nome'}</strong><br>
                                     <span style="font-size: 12px; color: var(--primary);">${precoMostra} ${prod.marca ? '| ' + prod.marca : ''}</span><br>
-                                    <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span> ${isPromo ? '<span style="font-size: 11px; font-weight: 700; color: var(--primary);">| 🔥 Promoção</span>' : ''}
+                                    <span style="font-size: 11px; font-weight: 700; color: ${statusCor};">${statusTexto}</span> 
+                                    ${isPromo ? '<span style="font-size: 11px; font-weight: 700; color: var(--primary);">| 🔥 Promoção</span>' : ''}
+                                    ${isDestaque ? '<span style="font-size: 11px; font-weight: 700; color: #f39c12;">| ⭐ Destaque</span>' : ''}
                                 </div>
                             </div>
                             <div class="acoes-gestor">
-                                <button class="btn-status-toggle" style="background: ${isPromo ? 'var(--primary)' : 'var(--card-border)'}; color: ${isPromo ? '#000' : '#fff'};" onclick="alternarPromocaoProduto('${id}', ${isPromo})">${isPromo + '' === 'true' ? 'Tirar Promo' : 'Colocar Promo'}</button>
+                                <button class="btn-status-toggle" style="background: ${isDestaque ? '#f39c12' : 'var(--card-border)'}; color: ${isDestaque ? '#000' : '#fff'};" onclick="alternarDestaqueProduto('${id}', ${isDestaque})">${isDestaque ? 'Tirar Destaque' : '⭐ Colocar Destaque'}</button>
+                                <button class="btn-status-toggle" style="background: ${isPromo ? 'var(--primary)' : 'var(--card-border)'}; color: ${isPromo ? '#000' : '#fff'};" onclick="alternarPromocaoProduto('${id}', ${isPromo})">${isPromo ? 'Tirar Promo' : '🔥 Colocar Promo'}</button>
                                 <button class="btn-status-toggle" onclick="alternarStatusProduto('${id}', '${prod.status || 'disponivel'}')">${isIndisponivel ? 'Ativar' : 'Pausar'}</button>
                                 <button class="btn-editar" onclick="prepararEdicao('${id}')">Editar</button>
                                 <button class="btn-excluir" onclick="deletarProduto('${id}')">Excluir</button>
@@ -1670,11 +1682,22 @@
             } catch (error) { console.error(error); }
         }
 
+        window.alternarDestaqueProduto = async function(id, destaqueAtual) {
+            try {
+                const scrollPos = window.scrollY;
+                await setDoc(doc(db, "produtos", id), { destaque: !destaqueAtual }, { merge: true });
+                await carregarGerenciador();
+                await carregarCatalogo();
+                window.scrollTo(0, scrollPos);
+            } catch (e) {
+                alert('Erro ao alterar status de destaque.');
+            }
+        }
+
         window.alternarPromocaoProduto = async function(id, promoAtual) {
             try {
                 const scrollPos = window.scrollY;
-                const novoValor = !promoAtual;
-                await setDoc(doc(db, "produtos", id), { promocao: novoValor }, { merge: true });
+                await setDoc(doc(db, "produtos", id), { promocao: !promoAtual }, { merge: true });
                 await carregarGerenciador();
                 await carregarCatalogo();
                 window.scrollTo(0, scrollPos);
@@ -1747,6 +1770,7 @@
                 document.getElementById('desconto-pix').value = prod.descontoPix || '';
                 document.getElementById('status-produto').value = prod.status || 'disponivel';
                 document.getElementById('promocao-produto').checked = !!prod.promocao;
+                document.getElementById('destaque-produto').checked = !!prod.destaque;
                 document.getElementById('descricao').value = prod.descricao || '';
                 document.getElementById('img-fit').value = prod.ajusteImagem || 'contain';
                 
@@ -1860,6 +1884,7 @@
                     descontoPix: document.getElementById('desconto-pix').value,
                     status: document.getElementById('status-produto').value,
                     promocao: document.getElementById('promocao-produto').checked,
+                    destaque: document.getElementById('destaque-produto').checked,
                     imagem: listaImagensValidas[0], 
                     imagens: listaImagensValidas,   
                     ajusteImagem: document.getElementById('img-fit').value,
@@ -2051,9 +2076,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- Opções separadas de Promoção e Destaque -->
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 8px;">
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--primary); font-size: 13px;">
-                                <input type="checkbox" id="promocao-produto" style="width: 18px; height: 18px; cursor: pointer;"> 🔥 Destacar na aba de Promoções do Catálogo
+                                <input type="checkbox" id="promocao-produto" style="width: 18px; height: 18px; cursor: pointer;"> 🔥 Exibir na aba de Promoções
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #f39c12; font-size: 13px;">
+                                <input type="checkbox" id="destaque-produto" style="width: 18px; height: 18px; cursor: pointer;"> ⭐ Exibir no Carrossel de Destaques (Topo)
                             </label>
                         </div>
 
